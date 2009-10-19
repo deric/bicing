@@ -33,17 +33,17 @@ public class MapStepCostFunction implements StepCostFunction {
 		String toLoc = toNextState.toString();
 		if (fromCurrentState instanceof Percept) {
 			fromLoc = (String) ((Percept) fromCurrentState)
-					.getAttribute(MapEnvironment.STATE_IN);
+					.getAttribute(DynAttributeNames.PERCEPT_IN);
 			toLoc = (String) ((Percept) toNextState)
-					.getAttribute(MapEnvironment.STATE_IN);
+					.getAttribute(DynAttributeNames.PERCEPT_IN);
 		}
 
-		Integer distance = map.getDistance(fromLoc, toLoc);
+		Double distance = map.getDistance(fromLoc, toLoc);
 
-		if (null == distance || distance < 0) {
+		if (distance == null || distance <= 0) {
 			return constantCost;
 		}
 
-		return constantCost + new Double(distance);
+		return new Double(distance);
 	}
 }

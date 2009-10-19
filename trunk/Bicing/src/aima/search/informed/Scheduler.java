@@ -28,8 +28,11 @@ public class Scheduler {
 	}
 
 	public double getTemp(int t) {
-            int temp= (t - (t%limit))+limit;
-			double res = k * Math.exp((-1) * lam * temp);
+		if (t < limit) {
+			double res = k * Math.exp((-1) * lam * t);
 			return res;
+		} else {
+			return 0.0;
+		}
 	}
 }

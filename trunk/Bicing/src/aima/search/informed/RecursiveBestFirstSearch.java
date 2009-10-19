@@ -45,7 +45,7 @@ public class RecursiveBestFirstSearch extends NodeExpander implements Search {
 
 	private static final String PATH_COST = "pathCost";
 
-	private static final Double INFINITY = Double.POSITIVE_INFINITY;
+	private static final Double INFINITY = Double.MAX_VALUE;
 
 	public RecursiveBestFirstSearch(EvaluationFunction ef) {
 		evaluationFunction = ef;

@@ -60,7 +60,6 @@ public class HillClimbingSearch extends NodeExpander implements Search {
 		// loop do
 		while (true) {
 			List children = expandNode(current, p);
-                        
 			// neighbor <- a highest-valued successor of current
 			neighbor = getHighestValuedNodeFrom(children, p);
 
