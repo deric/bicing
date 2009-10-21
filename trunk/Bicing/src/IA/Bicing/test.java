@@ -23,18 +23,17 @@ public class test {
         int sumBic = 0, sumDem = 0, sumAvai = 0, sumNeed = 0;
         double stdDem[], stdStay[], stdCurr[];
 
-        Bicing b = new Bicing(20, 1000, Bicing.RUSH_HOUR, 200);
+        BicingGenerator b = new BicingGenerator(20, 1000, BicingGenerator.RUSH_HOUR, 200);
 
         stdDem = new double[b.getNumStations()];
         stdStay = new double[b.getNumStations()];
         stdCurr = new double[b.getNumStations()];
 
-System.out.println("Mov Cur Dem Dif Exc ");
-
+        System.out.println("Mov Cur Dem Dif Exc ");
 
         for (int i = 0; i < b.getNumStations(); i++) {
             numStay = b.getStationDoNotMove(i);
-            numCurr = b.getStationNextState(i);
+            numCurr = b.getStationState(i);
             numDem = b.getDemandNextHour(i);
             stdStay[i] = numStay;
             stdCurr[i] = numCurr;
@@ -73,7 +72,7 @@ System.out.println("Mov Cur Dem Dif Exc ");
 //                Descriptive.standardDeviation(Descriptive.variance(dal.size(), Descriptive.sum(dal), Descriptive.sumOfSquares(dal))));
 //
 
-
+        System.out.format(" [X]  [Y]\n");
         for (int i = 0; i < b.getNumStations(); i++) {
             System.out.format("est %2d = %2d %2d\n", i, b.getStationCoord(i)[0], b.getStationCoord(i)[1]);
         }
