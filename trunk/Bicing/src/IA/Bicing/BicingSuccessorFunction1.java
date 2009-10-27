@@ -22,11 +22,13 @@ public class BicingSuccessorFunction1 implements SuccessorFunction {
     public List getSuccessors(Object state) {
         ArrayList successors = new ArrayList();
         bicing = (BicingState) state;
-        cnt = bicing.getStationsNum();
-        System.out.println(bicing.getLastAction());
-        System.out.println(bicing);
+        //we can make just as many move as we have vans
+        if(bicing.getLevel() < numVans){
+            cnt = bicing.getStationsNum();
+           // System.out.println(bicing.getLastAction());
+           // System.out.println(bicing);
 
-        for(int v = 0; v< numVans; v++){
+            //try to move bikes (if there are any) from each station
             for(int i=0; i< cnt; i++){
                 if(bicing.hasNextAvailableBike(i)){
                     int num = bicing.getNextAvailableBikesNum(i);
@@ -34,7 +36,7 @@ public class BicingSuccessorFunction1 implements SuccessorFunction {
                 }
             }
         }
-        System.out.println("next states: "+successors.size());
+       // System.out.println("next states: "+successors.size());
         return successors;
     }
 

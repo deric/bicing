@@ -20,7 +20,7 @@ public class BicingGenerator {
     private int numBicicletas;
     private int modoDem;
     private int[][] coordEstaciones;
-    private int[]  stay;
+    private int[] stay;
     private int[] next;
     private int[] demand;
     public final static int EQUILIBRIUM = 0;
@@ -207,9 +207,7 @@ public class BicingGenerator {
         double dist;
 
         dist= Math.sqrt(Math.pow(coordEstaciones[est1][0]- coordEstaciones[est2][0],2)
-                       +Math.pow(coordEstaciones[est1][1]-coordEstaciones[est2][1],2)) ;
-      
-
+                       +Math.pow(coordEstaciones[est1][1]-coordEstaciones[est2][1],2));
         return dist;
     }
 

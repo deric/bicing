@@ -1,7 +1,6 @@
 
 package IA.Bicing;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,8 +72,9 @@ public class BicingState {
     public void moveBicicle(int fromSta, int toSta, int biciclesNum){
         moves.put(++actionsCnt,Integer.toString(fromSta)+" -> "
                             +Integer.toString(toSta)+": "+biciclesNum);
-        current[fromSta] = current[fromSta]-biciclesNum;
-        current[toSta] = current[toSta]+biciclesNum;
+        current[fromSta] -= biciclesNum;
+        next[fromSta] -= biciclesNum;
+        next[toSta] += biciclesNum;
     }
 
     public void dobleMoveBikes(int fromSta1, int toSta1, int biciclesNum1,
@@ -83,10 +83,12 @@ public class BicingState {
                             +Integer.toString(toSta1)+": "+biciclesNum1+"\n"+
                             Integer.toString(fromSta2)+" -> "
                             +Integer.toString(toSta2)+": "+biciclesNum2);
-        current[fromSta1] = current[fromSta1]-biciclesNum1;
-        current[toSta1] = current[toSta1]+biciclesNum1;
-        current[fromSta2] = current[fromSta2]-biciclesNum2;
-        current[toSta2] = current[toSta2]+biciclesNum2;
+        current[fromSta1] -= biciclesNum1;
+        next[fromSta1] -= biciclesNum1;
+        next[toSta1] += biciclesNum1;
+        current[fromSta2] -= biciclesNum2;
+        next[fromSta2] -= biciclesNum2;
+        next[toSta2] += biciclesNum2;
     }
 
     public static void setStationsNum(int num){
@@ -103,7 +105,7 @@ public class BicingState {
      * @return
      */
     public boolean hasNextAvailableBike(int stationIdx){
-        return ((current[stationIdx] - demanded[stationIdx]) > 0);
+        return (current[stationIdx] > 0);
     }
 
     /**
@@ -112,7 +114,7 @@ public class BicingState {
      * @return
      */
     public int getNextAvailableBikesNum(int stationIdx){
-        return (int) (current[stationIdx] - demanded[stationIdx]);
+        return (int) (current[stationIdx]);
     }
 
     public int getBikesNotMove(int idx){
@@ -140,6 +142,10 @@ public class BicingState {
        String res = (String) moves.get(actionsCnt);
       // System.out.println(res);
        return res;
+    }
+
+    public int getLevel(){
+        return actionsCnt;
     }
 
     @Override

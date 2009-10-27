@@ -20,7 +20,7 @@ public class BicingHeuristicFunction1 implements HeuristicFunction {
                 score+= Math.pow(bicing.getNextAvailableBikesNum(i),2);
             }
         }
-        System.out.println("score: "+score);
+        //System.out.println("score: "+score);
         return score;
     }
 

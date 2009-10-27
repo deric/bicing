@@ -5,9 +5,12 @@ import aima.search.framework.Problem;
 import aima.search.framework.QueueSearch;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
+import aima.search.informed.AStarSearch;
 import aima.search.informed.HillClimbingSearch;
+import aima.search.informed.SimulatedAnnealingSearch;
 import aima.search.uninformed.BreadthFirstSearch;
 import aima.search.uninformed.DepthFirstSearch;
+import aima.search.uninformed.DepthLimitedSearch;
 import aima.search.uninformed.IterativeDeepeningSearch;
 import java.util.Iterator;
 import java.util.List;
@@ -23,37 +26,67 @@ public class BicingDemo {
      * how many bikes can load 1 van
      */
     private static int vanCapacity = 20;
+    private static int stations = 10;
+    private static int bikes = 100;
 
      /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        BicingGenerator b = new BicingGenerator(10, 100, BicingGenerator.RUSH_HOUR, 200);
+        BicingGenerator b = new BicingGenerator(stations, bikes, BicingGenerator.RUSH_HOUR, 100);
         Object initialState = new BicingState(b.getNumStations(),b.getCurrent(), b.getNext(), b.getDemand());
 
-        try {
-
-            Problem problem=new Problem(initialState,
-                    new BicingSuccessorFunction1(numVan, vanCapacity),
-                    new BicingGoalTest(),
-                    new BicingHeuristicFunction1()
-                    );
-        /*    Search search = new IterativeDeepeningSearch();
-            SearchAgent agent = new SearchAgent(problem,search);
-      */
-            QueueSearch qs = new GraphSearch();
-            Search search = new BreadthFirstSearch(qs);
-            SearchAgent agent = new SearchAgent(problem,search);
-
-            System.out.println();
-            printActions(agent.getActions());
-         //   System.out.println("Search Outcome=" + search.getOutcome());
-        //    System.out.println("Final State=\n" + search.getLastSearchState());
-            printInstrumentation(agent.getInstrumentation());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        hillClimbingSearch(initialState);
+        simulatedAnnealingSearch(initialState);
     }
+
+
+    	private static void hillClimbingSearch(Object initialState) {
+		System.out.println("\nHillClimbing  -->");
+		try {
+                        Problem problem=new Problem(initialState,
+                                new BicingSuccessorFunction1(numVan, vanCapacity),
+                                new BicingGoalTest(),
+                                new BicingHeuristicFunction1()
+                                );
+
+			HillClimbingSearch search = new HillClimbingSearch();
+			SearchAgent agent = new SearchAgent(problem, search);
+
+			System.out.println();
+			printActions(agent.getActions());
+			System.out.println("Search Outcome=" + search.getOutcome());
+			System.out.println("Final State=\n" + search.getLastSearchState());
+			printInstrumentation(agent.getInstrumentation());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+        private static void simulatedAnnealingSearch(Object initialState) {
+		System.out.println("\nSimulated Annealing  -->");
+		try {
+			  Problem problem=new Problem(initialState,
+                                new BicingSuccessorFunction1(numVan, vanCapacity),
+                                new BicingGoalTest(),
+                                new BicingHeuristicFunction1()
+                                );
+			SimulatedAnnealingSearch search = new SimulatedAnnealingSearch();
+			SearchAgent agent = new SearchAgent(problem, search);
+
+			System.out.println();
+			printActions(agent.getActions());
+			System.out.println("Search Outcome=" + search.getOutcome());
+			System.out.println("Final State=\n" + search.getLastSearchState());
+			printInstrumentation(agent.getInstrumentation());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+
 
         private static void printInstrumentation(Properties properties) {
 		Iterator keys = properties.keySet().iterator();
