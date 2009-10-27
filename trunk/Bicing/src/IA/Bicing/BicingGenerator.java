@@ -196,12 +196,12 @@ public class BicingGenerator {
         return coord;
     }
 
-      /**
+    /**
      * Retutns the distance between two stations
      *
        * @param est1 Station one number
        * @param est2 Station two number
-       * @return 
+       * @return
        */
     public double getStationsDistance(int est1,int est2) {
         double dist;
@@ -209,6 +209,10 @@ public class BicingGenerator {
         dist= Math.sqrt(Math.pow(coordEstaciones[est1][0]- coordEstaciones[est2][0],2)
                        +Math.pow(coordEstaciones[est1][1]-coordEstaciones[est2][1],2));
         return dist;
+    }
+
+    public int[][] getStationsCoordinates(){
+        return coordEstaciones;
     }
 
   /**
