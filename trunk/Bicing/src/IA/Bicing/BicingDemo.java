@@ -1,6 +1,7 @@
 package IA.Bicing;
 
 import aima.search.framework.GraphSearch;
+import aima.search.framework.HeuristicFunction;
 import aima.search.framework.Problem;
 import aima.search.framework.QueueSearch;
 import aima.search.framework.Search;
@@ -37,28 +38,30 @@ public class BicingDemo {
         Random generator = new Random();
         BicingGenerator b = new BicingGenerator(stations, bikes, BicingGenerator.RUSH_HOUR, generator.nextInt());
         Object initialState = new BicingState(b.getCurrent(), b.getNext(),
-                                    b.getDemand(), b.getStationsCoordinates());
+                                    b.getDemand(), b.getStationsCoordinates(),numVan);
         System.out.println("\nInitial State  -->");
         System.out.println(initialState);
-        hillClimbingSearch(initialState);
-        simulatedAnnealingSearch(initialState);
+
+        HeuristicFunction h = new BicingHeuristicFunction2();
+        hillClimbingSearch(initialState, h);
+        simulatedAnnealingSearch(initialState, h);
     }
 
 
-    	private static void hillClimbingSearch(Object initialState) {
+    	private static void hillClimbingSearch(Object initialState,HeuristicFunction h) {
 		System.out.println("\nHillClimbing  -->");
 		try {
                         Problem problem=new Problem(initialState,
                                 new BicingSuccessorFunction1(numVan, vanCapacity),
                                 new BicingGoalTest(),
-                                new BicingHeuristicFunction1()
+                                h
                                 );
 
 			HillClimbingSearch search = new HillClimbingSearch();
 			SearchAgent agent = new SearchAgent(problem, search);
 
 			System.out.println();
-		//	printActions(agent.getActions());
+			//printActions(agent.getActions());
 			System.out.println("Search Outcome=" + search.getOutcome());
 			System.out.println("Final State=\n" + search.getLastSearchState());
 			printInstrumentation(agent.getInstrumentation());
@@ -68,19 +71,19 @@ public class BicingDemo {
 	}
 
 
-        private static void simulatedAnnealingSearch(Object initialState) {
+        private static void simulatedAnnealingSearch(Object initialState,HeuristicFunction h) {
 		System.out.println("\nSimulated Annealing  -->");
 		try {
 			  Problem problem=new Problem(initialState,
                                 new BicingSuccessorFunction1(numVan, vanCapacity),
                                 new BicingGoalTest(),
-                                new BicingHeuristicFunction1()
+                                h
                                 );
 			SimulatedAnnealingSearch search = new SimulatedAnnealingSearch();
 			SearchAgent agent = new SearchAgent(problem, search);
 
 			System.out.println();
-		//	printActions(agent.getActions());
+			//printActions(agent.getActions());
 			System.out.println("Search Outcome=" + search.getOutcome());
 			System.out.println("Final State=\n" + search.getLastSearchState());
 			printInstrumentation(agent.getInstrumentation());

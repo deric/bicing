@@ -1,8 +1,5 @@
 package IA.Bicing;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Represents number of rented, demanded bikes in a city
  * @author Tomas Barton 
@@ -13,6 +10,8 @@ public class BicingState {
      * nuber of stations
      */
     private static int stationsNum;
+
+    private static int maxDepth;
     /**
      * number of demanded bicycles in next hour
      */
@@ -30,14 +29,16 @@ public class BicingState {
      * coordinates of stations
      */
     private static int[][] coordinates;
-    private Map<Integer, String> moves = new HashMap<Integer, String>();
+    protected String[] moves;
 
-    BicingState(int[] current, int[] next, int[] demanded, int[][] coordinates) {
+    BicingState(int[] current, int[] next, int[] demanded, int[][] coordinates, int maxDepth) {
         this.demanded = demanded;
         this.current = current;
         this.next = next;
         BicingState.coordinates = coordinates;
         BicingState.stationsNum = demanded.length;
+        BicingState.maxDepth = maxDepth;
+        moves = new String[maxDepth];
     }
 
     /**
@@ -56,6 +57,7 @@ public class BicingState {
             this.current[i] = current[i];
             this.next[i] = next[i];
         }
+        moves = new String[maxDepth];
     }
 
     /**
@@ -66,7 +68,7 @@ public class BicingState {
      */
     public void moveBicicle(int fromSta, int toSta, int biciclesNum) {
         String msg = Integer.toString(fromSta) + " -> " + Integer.toString(toSta) + ": " + biciclesNum;
-        moves.put(++actionsCnt, msg);
+        moves[actionsCnt++] = msg;        
         current[fromSta] -= biciclesNum;
         next[fromSta] -= biciclesNum;
         next[toSta] += biciclesNum;
@@ -76,7 +78,8 @@ public class BicingState {
             int fromSta2, int toSta2, int biciclesNum2) {
         String msg = Integer.toString(fromSta1) + " -> " + Integer.toString(toSta1) + ": " + biciclesNum1 + "\n" +
                 Integer.toString(fromSta2) + " -> " + Integer.toString(toSta2) + ": " + biciclesNum2;
-        moves.put(++actionsCnt, msg);
+        moves[actionsCnt++] = msg;
+        
         current[fromSta1] -= biciclesNum1;
         next[fromSta1] -= biciclesNum1;
         next[toSta1] += biciclesNum1;
@@ -133,9 +136,7 @@ public class BicingState {
     }
 
     public String getLastAction() {
-        String res = (String) moves.get(actionsCnt);
-        // System.out.println(res);
-        return res;
+        return moves[(actionsCnt-1)];
     }
 
     public int getLevel() {
@@ -158,9 +159,7 @@ public class BicingState {
         BicingState bs = new BicingState(current, next, demanded);
         if(this.actionsCnt > 0){
             for(int i =0; i<this.actionsCnt; i++){
-                String s = moves.get(i);
-              //  System.out.println(i+": "+s);
-                    bs.moves.put(i, s);
+                bs.moves[i] = new String(moves[i]);
             }
         }
         bs.actionsCnt = this.actionsCnt;
@@ -206,7 +205,7 @@ public class BicingState {
         if(actionsCnt > 0){
             sb.append("moves: \n");
             for(int i =0; i<actionsCnt; i++){
-                sb.append(moves.get(i));
+                sb.append(moves[i]);
             }
         }
         return sb.toString();
