@@ -20,9 +20,9 @@ public class BicingGenerator {
     private int numBicicletas;
     private int modoDem;
     private int[][] coordEstaciones;
-    private int[] EstadoEstaciones;
-    private int[] EstadoNextEstaciones;
-    private int[] nuevaDemanda;
+    private int[]  stay;
+    private int[] next;
+    private int[] demand;
     public final static int EQUILIBRIUM = 0;
     public final static int RUSH_HOUR = 1;
     private Random myRandom;
@@ -41,6 +41,8 @@ public class BicingGenerator {
         numEstaciones = est;
         numBicicletas = bic;
         modoDem = dem;
+
+        BicingState.setStationsNum(est);
 
         generaCoordenadas();
         generaEstadoActual();
@@ -101,15 +103,15 @@ public class BicingGenerator {
         int numB;
         int numE;
 
-        EstadoEstaciones = new int[numEstaciones];
+         stay = new int[numEstaciones];
         for (int i = 0; i < numEstaciones; i++) {
-            EstadoEstaciones[i] = 0;
+             stay[i] = 0;
         }
 
         for (int i = numBicicletas; i > 0;) {
             numB = myRandom.nextInt(VAR_DISTRIBUTION_STATE);
             numE = myRandom.nextInt(numEstaciones);
-            EstadoEstaciones[numE] = EstadoEstaciones[numE] + numB;
+             stay[numE] =  stay[numE] + numB;
             i = i - numB;
         }
     }
@@ -126,23 +128,23 @@ public class BicingGenerator {
         int numMovs = (int) (numBicicletas * PERCENTAGE_USER_MOVS);
         int in, out;
 
-        EstadoNextEstaciones = new int[numEstaciones];
+        next = new int[numEstaciones];
 
         for (int i = 0; i < numEstaciones; i++) {
-            EstadoNextEstaciones[i] = 0;
+            next[i] = 0;
         }
 
         for (int i = 0; i < numMovs; i++) {
             out = myRandom.nextInt(numEstaciones);
             in = myRandom.nextInt(numEstaciones);
-            if (EstadoEstaciones[out] > 0) {
-                EstadoEstaciones[out]--;
-                EstadoNextEstaciones[in]++;
+            if ( stay[out] > 0) {
+                 stay[out]--;
+                next[in]++;
             }
         }
 
            for (int i = 0; i < numEstaciones; i++) {
-               EstadoNextEstaciones[i]=EstadoNextEstaciones[i]+EstadoEstaciones[i];
+               next[i]=next[i]+ stay[i];
            }
     }
 
@@ -167,14 +169,14 @@ public class BicingGenerator {
 
         }
 
-        nuevaDemanda = new int[numEstaciones];
+        demand = new int[numEstaciones];
         for (int i = 0; i < numEstaciones; i++) {
             if (myRandom.nextBoolean()) {
                 sign = 1;
             } else {
                 sign = -1;
             }
-            nuevaDemanda[i] = numMB + (sign * myRandom.nextInt((int) (numMB * var[myRandom.nextInt(1)])));
+            demand[i] = numMB + (sign * myRandom.nextInt((int) (numMB * var[myRandom.nextInt(1)])));
         }
 
     }
@@ -212,13 +214,13 @@ public class BicingGenerator {
     }
 
   /**
-     *  Returns the number of bicycles that don not move from the station the current hour
+     *  Returns the number of bicycles that do not move from the station the current hour
      *
      * @param st Station number
      * @return
      */
     public int getStationDoNotMove(int st) {
-        return EstadoEstaciones[st];
+        return stay[st];
     }
 
     /**
@@ -229,7 +231,7 @@ public class BicingGenerator {
      * @return
      */
     public int getStationState(int st) {
-        return EstadoNextEstaciones[st];
+        return next[st];
     }
 
     /**
@@ -239,7 +241,7 @@ public class BicingGenerator {
      * @return
      */
     public int getDemandNextHour(int st) {
-        return nuevaDemanda[st];
+        return demand[st];
     }
 
     /**
@@ -249,5 +251,17 @@ public class BicingGenerator {
      */
     public int getNumStations() {
         return numEstaciones;
+    }
+
+    public int[] getCurrent(){
+        return  stay;
+    }
+
+    public int[] getNext(){
+        return next;
+    }
+
+    public int[] getDemand(){
+        return demand;
     }
 }
