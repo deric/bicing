@@ -6,8 +6,13 @@ import aima.search.framework.HeuristicFunction;
  *
  * @author Tomas Barton 
  */
-public class BicingHeuristicFunction2 implements HeuristicFunction {
+public class BicingHeuristicFunction3 implements HeuristicFunction {
+    private double rate;
 
+    BicingHeuristicFunction3(double rate){
+        this.rate = rate;
+    }
+    
     public double getHeuristicValue(Object state) {
         BicingState bicing = (BicingState) state;
         int cnt = bicing.getStationsNum();
@@ -29,7 +34,7 @@ public class BicingHeuristicFunction2 implements HeuristicFunction {
                 mover = 0;
                 sumNeed = sumNeed - balance;
             }
-            score = free+sumNeed;   
+            score = free+sumNeed+ rate*bicing.getTotalDistance();
         }
         return score;
     }

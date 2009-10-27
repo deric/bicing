@@ -5,12 +5,13 @@ package IA.Bicing;
  * @author Tomas Barton 
  */
 public class BicingState {
-
     /**
      * nuber of stations
      */
     private static int stationsNum;
-
+    /**
+     * Depth is determinated by number of vans
+     */
     private static int maxDepth;
     /**
      * number of demanded bicycles in next hour
@@ -24,13 +25,31 @@ public class BicingState {
      * number of bicycles after users' moves
      */
     private int next[];
-    private int actionsCnt = 0;
+    /**
+     * depth in a tree
+     */
+    private int level = 0;
     /**
      * coordinates of stations
      */
     private static int[][] coordinates;
-    protected String[] moves;
+    /**
+     * move(s) to reach this state from initial state
+     */
+    private String[] moves;
+    /**
+     * total distance for transporting bikes from one station to another
+     */
+    private double totalDistance = 0.0;
 
+    /**
+     * Constructor for initialization of this task
+     * @param current
+     * @param next
+     * @param demanded
+     * @param coordinates
+     * @param maxDepth
+     */
     BicingState(int[] current, int[] next, int[] demanded, int[][] coordinates, int maxDepth) {
         this.demanded = demanded;
         this.current = current;
@@ -42,7 +61,7 @@ public class BicingState {
     }
 
     /**
-     * Deep copy
+     * Used for a deep copy of state
      * @param numStations
      * @param current
      * @param next
@@ -67,8 +86,11 @@ public class BicingState {
      * @param numBic
      */
     public void moveBicicle(int fromSta, int toSta, int biciclesNum) {
-        String msg = Integer.toString(fromSta) + " -> " + Integer.toString(toSta) + ": " + biciclesNum;
-        moves[actionsCnt++] = msg;        
+        double dist = getStationsDistance(fromSta, toSta);
+        String msg =  biciclesNum + ": " +Integer.toString(fromSta) + " -> " + Integer.toString(toSta)
+                +", dist: "+ dist;
+        totalDistance += dist;
+        moves[level++] = msg;
         current[fromSta] -= biciclesNum;
         next[fromSta] -= biciclesNum;
         next[toSta] += biciclesNum;
@@ -76,9 +98,15 @@ public class BicingState {
 
     public void dobleMoveBikes(int fromSta1, int toSta1, int biciclesNum1,
             int fromSta2, int toSta2, int biciclesNum2) {
-        String msg = Integer.toString(fromSta1) + " -> " + Integer.toString(toSta1) + ": " + biciclesNum1 + "\n" +
-                Integer.toString(fromSta2) + " -> " + Integer.toString(toSta2) + ": " + biciclesNum2;
-        moves[actionsCnt++] = msg;
+        double dist1, dist2;
+        dist1 = getStationsDistance(fromSta1, toSta1);
+        dist2 = getStationsDistance(toSta1, toSta2);
+        String msg = biciclesNum1+": "+Integer.toString(fromSta1) + " -> " + Integer.toString(toSta1)
+                + ", dist: " + dist1 + "\n" +
+                biciclesNum2+": "+Integer.toString(fromSta2) + " -> " + Integer.toString(toSta2)
+                + ", dist: " + dist2;
+        moves[level++] = msg;
+        totalDistance += (dist1+dist2);
         
         current[fromSta1] -= biciclesNum1;
         next[fromSta1] -= biciclesNum1;
@@ -136,11 +164,11 @@ public class BicingState {
     }
 
     public String getLastAction() {
-        return moves[(actionsCnt-1)];
+        return moves[(level-1)];
     }
 
     public int getLevel() {
-        return actionsCnt;
+        return level;
     }
 
     /**
@@ -153,16 +181,24 @@ public class BicingState {
     public double getStationsDistance(int est1, int est2) {
         return (double) Math.sqrt(Math.pow(coordinates[est1][0] - coordinates[est2][0], 2) + Math.pow(coordinates[est1][1] - coordinates[est2][1], 2));
     }
+
+    /**
+     * Distance for transporting bikes
+     * @return totalDistance
+     */
+    public double getTotalDistance(){
+        return totalDistance;
+    }
    
     @Override
     public BicingState clone() {
         BicingState bs = new BicingState(current, next, demanded);
-        if(this.actionsCnt > 0){
-            for(int i =0; i<this.actionsCnt; i++){
+        if(this.level > 0){
+            for(int i =0; i<this.level; i++){
                 bs.moves[i] = new String(moves[i]);
             }
         }
-        bs.actionsCnt = this.actionsCnt;
+        bs.level = this.level;
         return bs;
     }
 
@@ -202,9 +238,9 @@ public class BicingState {
             sb.append(line);
         }
         sb.append(String.format("\nBicis= %3d Demanda= %3d Disponibles= %3d Necesitan= %3d\n\n", sumBic, sumDem, sumAvai, sumNeed));
-        if(actionsCnt > 0){
+        if(level > 0){
             sb.append("moves: \n");
-            for(int i =0; i<actionsCnt; i++){
+            for(int i =0; i<level; i++){
                 sb.append(moves[i]);
             }
         }
