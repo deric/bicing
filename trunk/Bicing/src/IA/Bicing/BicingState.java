@@ -17,6 +17,11 @@ public class BicingState {
      * number of demanded bicycles in next hour
      */
     private static int demanded[];
+     /**
+     * coordinates of stations
+     */
+    private static int[][] coordinates;
+
     /**
      * current number of bicycles, that won't move this hour
      */
@@ -29,10 +34,7 @@ public class BicingState {
      * depth in a tree
      */
     private int actionCnt = 0;
-    /**
-     * coordinates of stations
-     */
-    private static int[][] coordinates;
+
     /**
      * move(s) to reach this state from initial state
      */
@@ -50,7 +52,7 @@ public class BicingState {
      * @param coordinates
      * @param maxDepth
      */
-    BicingState(int[] current, int[] next, int[] demanded, int[][] coordinates, int maxDepth) {
+    public BicingState(int[] current, int[] next, int[] demanded, int[][] coordinates, int maxDepth) {
         BicingState.demanded = demanded;
         this.current = current;
         this.next = next;
@@ -78,6 +80,7 @@ public class BicingState {
         moves = new String[maxDepth];
     }
 
+
     /**
      * Moves bicicle from one station to another and record this move
      * @param fromSta
@@ -92,6 +95,9 @@ public class BicingState {
         moves[actionCnt++] = msg;
         current[fromSta] -= biciclesNum;
         next[fromSta] -= biciclesNum;
+        if(next[fromSta] < 0){
+           next[fromSta] = 0;
+        }
         next[toSta] += biciclesNum;
     }
 
@@ -109,9 +115,15 @@ public class BicingState {
         
         current[fromSta1] -= biciclesNum1;
         next[fromSta1] -= biciclesNum1;
+        if(next[fromSta1] < 0){
+           next[fromSta1] = 0;
+        }
         next[toSta1] += biciclesNum1;
         current[fromSta2] -= biciclesNum2;
         next[fromSta2] -= biciclesNum2;
+        if(next[fromSta2] < 0){
+           next[fromSta2] = 0;
+        }
         next[toSta2] += biciclesNum2;
     }
 

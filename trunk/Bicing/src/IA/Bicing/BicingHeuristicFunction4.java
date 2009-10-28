@@ -9,7 +9,7 @@ import aima.search.framework.HeuristicFunction;
 public class BicingHeuristicFunction4 implements HeuristicFunction {
     private double rate;
 
-    BicingHeuristicFunction4(double rate){
+    public BicingHeuristicFunction4(double rate){
         this.rate = rate;
     }
 

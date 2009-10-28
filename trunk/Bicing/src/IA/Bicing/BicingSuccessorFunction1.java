@@ -15,7 +15,7 @@ public class BicingSuccessorFunction1 implements SuccessorFunction {
     private int cnt;
     private BicingState bicing;
 
-    BicingSuccessorFunction1(int numVans, int vanCapacity){
+    public BicingSuccessorFunction1(int numVans, int vanCapacity){
         this.numVans = numVans;
         this.vanCapacity = vanCapacity;
     }

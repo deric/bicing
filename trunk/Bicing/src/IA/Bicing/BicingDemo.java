@@ -27,7 +27,7 @@ public class BicingDemo {
     /**
      * how many bikes can load 1 van
      */
-    private static int vanCapacity = 20;
+    private static int vanCapacity = 30;
     private static int stations = 10;
     private static int bikes = 100;
 
