@@ -23,11 +23,8 @@ public class BicingSuccessorFunction1 implements SuccessorFunction {
         ArrayList successors = new ArrayList();
         bicing = (BicingState) state;
         //we can make just as many move as we have vans
-        if(bicing.getLevel() < (numVans-1)){
+        if(bicing.getLevel() < numVans){
             cnt = bicing.getStationsNum();
-           // System.out.println(bicing.getLastAction());
-           // System.out.println(bicing);
-
             //try to move bikes (if there are any) from each station
             for(int i=0; i< cnt; i++){
                 if(bicing.hasNextAvailableBike(i)){

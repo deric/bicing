@@ -16,7 +16,7 @@ public class BicingState {
     /**
      * number of demanded bicycles in next hour
      */
-    private int demanded[];
+    private static int demanded[];
     /**
      * current number of bicycles, that won't move this hour
      */
@@ -28,7 +28,7 @@ public class BicingState {
     /**
      * depth in a tree
      */
-    private int level = 0;
+    private int actionCnt = 0;
     /**
      * coordinates of stations
      */
@@ -51,7 +51,7 @@ public class BicingState {
      * @param maxDepth
      */
     BicingState(int[] current, int[] next, int[] demanded, int[][] coordinates, int maxDepth) {
-        this.demanded = demanded;
+        BicingState.demanded = demanded;
         this.current = current;
         this.next = next;
         BicingState.coordinates = coordinates;
@@ -67,12 +67,11 @@ public class BicingState {
      * @param next
      * @param demanded
      */
-    BicingState(int[] current, int[] next, int[] demanded) {
-        this.demanded = new int[stationsNum];
+    BicingState(int[] current, int[] next) {
         this.current = new int[stationsNum];
         this.next = new int[stationsNum];
         for (int i = 0; i < stationsNum; i++) {
-            this.demanded[i] = demanded[i];
+            BicingState.demanded[i] = demanded[i];
             this.current[i] = current[i];
             this.next[i] = next[i];
         }
@@ -90,7 +89,7 @@ public class BicingState {
         String msg =  biciclesNum + ": " +Integer.toString(fromSta) + " -> " + Integer.toString(toSta)
                 +", dist: "+ dist;
         totalDistance += dist;
-        moves[level++] = msg;
+        moves[actionCnt++] = msg;
         current[fromSta] -= biciclesNum;
         next[fromSta] -= biciclesNum;
         next[toSta] += biciclesNum;
@@ -105,7 +104,7 @@ public class BicingState {
                 + ", dist: " + dist1 + "\n" +
                 biciclesNum2+": "+Integer.toString(fromSta2) + " -> " + Integer.toString(toSta2)
                 + ", dist: " + dist2;
-        moves[level++] = msg;
+        moves[actionCnt++] = msg;
         totalDistance += (dist1+dist2);
         
         current[fromSta1] -= biciclesNum1;
@@ -164,11 +163,11 @@ public class BicingState {
     }
 
     public String getLastAction() {
-        return moves[(level-1)];
+        return moves[(actionCnt-1)];
     }
 
     public int getLevel() {
-        return level;
+        return actionCnt;
     }
 
     /**
@@ -192,13 +191,14 @@ public class BicingState {
    
     @Override
     public BicingState clone() {
-        BicingState bs = new BicingState(current, next, demanded);
-        if(this.level > 0){
-            for(int i =0; i<this.level; i++){
+        BicingState bs = new BicingState(current, next);
+        if(this.actionCnt > 0){
+            for(int i =0; i<this.actionCnt; i++){
                 bs.moves[i] = new String(moves[i]);
             }
         }
-        bs.level = this.level;
+        bs.actionCnt = this.actionCnt;
+        bs.totalDistance = this.totalDistance;
         return bs;
     }
 
@@ -238,10 +238,10 @@ public class BicingState {
             sb.append(line);
         }
         sb.append(String.format("\nBicis= %3d Demanda= %3d Disponibles= %3d Necesitan= %3d\n\n", sumBic, sumDem, sumAvai, sumNeed));
-        if(level > 0){
+        if(actionCnt > 0){
             sb.append("moves: \n");
-            for(int i =0; i<level; i++){
-                sb.append(moves[i]);
+            for(int i =0; i<actionCnt; i++){
+                sb.append(moves[i]+"\n");
             }
         }
         return sb.toString();

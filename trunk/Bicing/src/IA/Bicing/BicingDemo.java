@@ -42,7 +42,7 @@ public class BicingDemo {
         System.out.println("\nInitial State  -->");
         System.out.println(initialState);
 
-        HeuristicFunction h = new BicingHeuristicFunction4(0.3);
+        HeuristicFunction h = new BicingHeuristicFunction4(0.5);
         hillClimbingSearch(initialState, h);
         simulatedAnnealingSearch(initialState, h);
     }
