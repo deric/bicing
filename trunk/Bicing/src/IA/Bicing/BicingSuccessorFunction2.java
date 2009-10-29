@@ -23,7 +23,7 @@ public class BicingSuccessorFunction2 implements SuccessorFunction {
         ArrayList successors = new ArrayList();
         bicing = (BicingState) state;
         //we can make just as many move as we have vans
-        if(bicing.getLevel() < numVans){
+        if(bicing.getActionCount() < numVans){
             cnt = bicing.getStationsNum();
             //try to move bikes (if there are any) from each station
             for(int i=0; i< cnt; i++){
@@ -47,7 +47,7 @@ public class BicingSuccessorFunction2 implements SuccessorFunction {
         for(int i=0; i < cnt; i++){
             if(i!=fromStation){
                 newState = bicing.clone();
-                newState.moveBicicle(fromStation, i, numBikes);
+                newState.moveBicicle(fromStation, i, numBikes,newState.getActionCount());
                 succ.add(new Successor(newState.getLastAction(), newState));
             }
         }
@@ -61,7 +61,8 @@ public class BicingSuccessorFunction2 implements SuccessorFunction {
                             if(j!=fromStation && j!=i){
                                 //and the rest we try to unload to every other station
                                  BicingState secondStepState = bicing.clone();
-                                 secondStepState.dobleMoveBikes(fromStation, i, k, fromStation, j, numBikes-k);
+                                 secondStepState.dobleMoveBikes(fromStation, i, 
+                                         k, fromStation, j, numBikes-k,secondStepState.getActionCount());
                                  succ.add(new Successor(secondStepState.getLastAction(), secondStepState));
                             }
                      }

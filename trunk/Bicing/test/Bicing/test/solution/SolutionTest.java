@@ -1,9 +1,7 @@
 package Bicing.test.solution;
 
 import IA.Bicing.BicingGoalTest;
-import IA.Bicing.BicingHeuristicFunction1;
 import IA.Bicing.BicingHeuristicFunction2;
-import IA.Bicing.BicingHeuristicFunction4;
 import IA.Bicing.BicingState;
 import IA.Bicing.BicingSuccessorFunction1;
 import aima.search.framework.HeuristicFunction;
@@ -11,8 +9,6 @@ import aima.search.framework.Problem;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
 import aima.search.informed.SimulatedAnnealingSearch;
-import java.util.Iterator;
-import java.util.Properties;
 import junit.framework.TestCase;
 
 /**

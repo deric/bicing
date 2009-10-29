@@ -31,9 +31,12 @@ public class BicingState {
      */
     private int next[];
     /**
-     * depth in a tree
+     * depth in a tree, max == number of vans
      */
     private int actionCnt = 0;
+    /**
+     * as one action can be done two moves
+     */
     private int moveCnt = 0;
 
     /**
@@ -70,6 +73,7 @@ public class BicingState {
         from = new int[2*maxDepth];
         to = new int[2*maxDepth];
         transfer = new int[2*maxDepth];
+        vans = new int[2*maxDepth];
     }
 
     /**
@@ -90,51 +94,81 @@ public class BicingState {
         moves = new String[maxDepth];
     }
 
-
     /**
+     * OPERATOR
      * Moves bicicle from one station to another and record this move
      * @param fromSta
      * @param toSta
      * @param numBic
      */
-    public void moveBicicle(int fromSta, int toSta, int biciclesNum) {
-        double dist = getStationsDistance(fromSta, toSta);
-        String msg =  biciclesNum + ": " +Integer.toString(fromSta) + " -> " + Integer.toString(toSta)
-                +", dist: "+ dist;
-        totalDistance += dist;
-        moves[actionCnt++] = msg;
-        current[fromSta] -= biciclesNum;
-        next[fromSta] -= biciclesNum;
-        if(next[fromSta] < 0){
-           next[fromSta] = 0;
-        }
-        next[toSta] += biciclesNum;
+    public void moveBicicle(int source, int destination, int bikesNum, int van) {
+        setMove(moveCnt++, source, destination, bikesNum, van);
+        actionCnt++;
     }
 
-    public void dobleMoveBikes(int fromSta1, int toSta1, int biciclesNum1,
-            int fromSta2, int toSta2, int biciclesNum2) {
-        double dist1, dist2;
-        dist1 = getStationsDistance(fromSta1, toSta1);
-        dist2 = getStationsDistance(toSta1, toSta2);
-        String msg = biciclesNum1+": "+Integer.toString(fromSta1) + " -> " + Integer.toString(toSta1)
-                + ", dist: " + dist1 + "\n" +
-                biciclesNum2+": "+Integer.toString(fromSta2) + " -> " + Integer.toString(toSta2)
-                + ", dist: " + dist2;
-        moves[actionCnt++] = msg;
-        totalDistance += (dist1+dist2);
+    /**
+     * OPERATOR
+     * One van moves bikes from one station to another two stations
+     * @param source1
+     * @param destination1
+     * @param biciclesNum1
+     * @param source2
+     * @param destination2
+     * @param biciclesNum2
+     * @param van
+     */
+    public void dobleMoveBikes(int source1, int destination1, int biciclesNum1,
+            int source2, int destination2, int biciclesNum2, int van) {
+        setMove(moveCnt++, source1, destination1, biciclesNum1, van);
+        setMove(moveCnt++, source2, destination2, biciclesNum2, van);
+        actionCnt++;
+    }
+
+    private void setMove(int action, int source, int destination, int bikeNum, int van){
+        from[action] = source;
+        to[action] = destination;
+        transfer[action] = bikeNum;
+        vans[action] = van;
+        current[source] -= bikeNum;
+        next[source] -= bikeNum;
+        if(next[source] < 0){
+           next[source] = 0;
+        }
+        next[destination] += bikeNum;
+        double dist = getStationsDistance(source, destination);
+        totalDistance += dist;
+        /** TODO remove, for debugging only */
+        String msg =  bikeNum + ": " +Integer.toString(source) + " -> " + Integer.toString(destination)
+        +", dist: "+ dist;
+        moves[actionCnt] = msg;
+    }
+
+    public void changeMove(int moveIdx, int destination, int bikesNum){
+        int source = from[moveIdx];
+        int van = vans[moveIdx];
+        //TODO
+        if(bikesNum == transfer[moveIdx]){
+            removeMove(moveIdx);
+        }else{
+            //check if is possible to make more moves
+        }
         
-        current[fromSta1] -= biciclesNum1;
-        next[fromSta1] -= biciclesNum1;
-        if(next[fromSta1] < 0){
-           next[fromSta1] = 0;
-        }
-        next[toSta1] += biciclesNum1;
-        current[fromSta2] -= biciclesNum2;
-        next[fromSta2] -= biciclesNum2;
-        if(next[fromSta2] < 0){
-           next[fromSta2] = 0;
-        }
-        next[toSta2] += biciclesNum2;
+        setMove(moveCnt++, source, destination, bikesNum, van);
+        actionCnt++;
+    }
+
+    public void removeMove(int moveIdx){
+        int source = from[moveIdx];
+        int destination = to[moveIdx];
+        int bikeNum = transfer[moveIdx];
+        double dist = getStationsDistance(from[moveIdx], to[moveIdx]);
+        totalDistance-=dist;
+        current[source] += bikeNum;
+        next[source] += bikeNum;
+        next[destination] -= bikeNum;
+        moves[moveIdx]= null;
+        moveCnt--;
+        actionCnt--;
     }
 
     public static void setStationsNum(int num) {
@@ -188,8 +222,12 @@ public class BicingState {
         return moves[(actionCnt-1)];
     }
 
-    public int getLevel() {
+    public int getActionCount() {
         return actionCnt;
+    }
+
+    public int getMoveCount(){
+        return moveCnt;
     }
 
     /**
@@ -214,12 +252,17 @@ public class BicingState {
     @Override
     public BicingState clone() {
         BicingState bs = new BicingState(current, next);
-        if(this.actionCnt > 0){
-            for(int i =0; i<this.actionCnt; i++){
+        if(this.moveCnt > 0){
+            for(int i =0; i<this.moveCnt; i++){
                 bs.moves[i] = new String(moves[i]);
+                bs.from[i] = this.from[i];
+                bs.to[i] = this.to[i];
+                bs.transfer[i] = this.transfer[i];
+                bs.vans[i] = this.vans[i];
             }
         }
         bs.actionCnt = this.actionCnt;
+        bs.moveCnt = this.moveCnt;
         bs.totalDistance = this.totalDistance;
         return bs;
     }
