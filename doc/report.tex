@@ -9,7 +9,7 @@
 
 % Title Page
 \title{Bicing}
-\author{Tomas Barton and Mauro Donadeo}
+\author{\textit{\textbf{Tomas Barton}} and \textit{\textbf{Mauro Donadeo}}}
 
 
 \begin{document}
@@ -19,10 +19,10 @@
 % \end{abstract}
 
 \chapter{Introduction}
-The aim of this project is to provide an program which would help provider of local bicing service\footnote{Bicing Barcelona -- \url{http://www.bicing.com}} with distribution of bikes to a approach to an ideal state when each user of this service would find a bike when is needed. 
+The aim of this project is to provide an program which would help the provider of local bicing service\footnote{Bicing Barcelona -- \url{http://www.bicing.com}} with distribution of bikes to approach to an ideal state, when each user of this service would find a bike when he needs it. 
 
 \section{About Bicing}
-The Bicing project is quite new in Barcelona, but after few months it became very popular. Owner of a special card, which can be purchased for 30 \euro, can rent a bike from a station for free, if he return this bike to some station in half an hour. Otherwise he pays a few cents for each hour until is the bike returned. 
+The Bicing project is quite new in Barcelona (started in 2007\cite{bicingw}), but after few months it became very popular. Owner of a special card, which can be purchased for 30~\euro \, per year, can rent a bike from a station for free, if he returns this bike to some station in a half an hour. Otherwise he pays a few cents for each hour until the bike is returned. 
 
 \begin{figure}[ht]
 \begin{center}
@@ -34,37 +34,48 @@ The Bicing project is quite new in Barcelona, but after few months it became ver
 
 Nowadays there are more than 400\footnote{418 stations at 12 October 2009} bike stations in Barcelona, the highest concentration of bike stations is of course in centre of city. Usually each station has from 20 up to 30 stands for bikes. In the very center they are placed quite close to each other.
 
-
-
 \section{Our task}
 With usage of \textbf{\textsl{F}} vans we are supposed to optimize distribution of bikes, so that as many customers as possible will find a disposable bike at time when they need it.
 
-Implementation will be done in Java, we took advantage of AIMA framework, which contains most of algorithm commonly used for local search.
+Implementation has been done in Java, we took advantage of AIMA framework\cite{aima}, which contains most of algorithms commonly used for  searching state space.
+
+\section{Complexity of problem}
+As long as we have to search just for solution of this problem for upcoming hour, size of state space is significantly reduced. When we display all possible states of this problem as a n-ary tree, we get not really deep tree -- this is exactly the number of maximum moves we can do and that is \textbf{\textsl{F}}, but this tree can have a huge branching factor. 
+
 
 \chapter{Implementation}
 \section{State representation} 
 Each state must contain information about distribution of bikes over all stations. So that we have to keep:
 \begin{itemize}
 \item current number of bikes at the station
-\item number of bikes that is going to be at station in next hour (moved by users)
-\item expected demand for bikes in an hour
+\item number of bikes that is going to be at station in an hour 
+\item moves how to reach this state (from empty state)
 \end{itemize}
-These information is different for each state, moreover we have other information which we need but it is same for every state:
+These information are different for each state, moreover we have other information which we need but they are same for every state:
 \begin{itemize}
  \item number of stations
  \item coordinates of stations
+ \item expected demand for bikes in upcoming hour
 \end{itemize}
 
 
 \section{Operators}
 
+\begin{description}
+ \item[moveBikes] simply moves given number of bikes from one station to another
+\item[doubleMoveBikes] loads \( a + b \) bikes at one station and unload \(a\) bikes at first station and \(b\) bikes at second station
+ \end{description}
+
 
 \clearpage
 \begin{thebibliography}{9}
-\bibitem{fold}{\em Milissa Tarquini:}{\bf Blasting the Myth of the Fold}
-		\url{http://www.boxesandarrows.com/view/blasting-the-myth-of} \\
-		{This is an electronic document. Date of publication: July 24, 2007. \\
-		Date retrieved: January 19, 2009. }
+\bibitem{aima}{\em Stuart Russell and Peter Norvig:}{\bf Artificial Intelligence: A Modern Approach}
+		\url{http://aima.cs.berkeley.edu/} \\
+		{Downloaded java implementation of algorithms (AIMA framework) from repository \url{http://code.google.com/p/aima-java/} by Ravi Mohan. Date of publication: October 3, 2009. \\
+		Date retrieved: October 12, 2009. }
+\bibitem{bicingw}{\em Wikipedia: }{\bf Bicing}
+\url{http://en.wikipedia.org/wiki/Bicing}\\
+{Date visited: October 27, 2009}
 
 
 \end{thebibliography}

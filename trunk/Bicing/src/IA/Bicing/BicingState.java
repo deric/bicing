@@ -1,7 +1,7 @@
 package IA.Bicing;
 
 /**
- * Represents number of rented, demanded bikes in a city
+ * Represents number of bikes available now and in one hour (demanded) in a city
  * @author Tomas Barton 
  */
 public class BicingState {
@@ -34,11 +34,17 @@ public class BicingState {
      * depth in a tree
      */
     private int actionCnt = 0;
+    private int moveCnt = 0;
 
     /**
      * move(s) to reach this state from initial state
      */
     private String[] moves;
+    private int[] from;
+    private int[] to;
+    private int[] transfer;
+    private int[] vans;
+
     /**
      * total distance for transporting bikes from one station to another
      */
@@ -60,6 +66,10 @@ public class BicingState {
         BicingState.stationsNum = demanded.length;
         BicingState.maxDepth = maxDepth;
         moves = new String[maxDepth];
+        //maximum possible movements
+        from = new int[2*maxDepth];
+        to = new int[2*maxDepth];
+        transfer = new int[2*maxDepth];
     }
 
     /**
