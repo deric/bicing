@@ -1,12 +1,13 @@
-package IA.Bicing;
+package IA.Bicing.heuristic;
 
+import IA.Bicing.*;
 import aima.search.framework.HeuristicFunction;
 
 /**
  *
  * @author Tomas Barton 
  */
-public class BicingHeuristicFunction1 implements HeuristicFunction {
+public class Heuristic1 implements HeuristicFunction {
 
     public double getHeuristicValue(Object state) {
         BicingState bicing = (BicingState) state;

@@ -1,5 +1,6 @@
-package IA.Bicing;
+package IA.Bicing.succesor;
 
+import IA.Bicing.*;
 import aima.search.framework.Successor;
 import aima.search.framework.SuccessorFunction;
 import java.util.ArrayList;
@@ -9,13 +10,13 @@ import java.util.List;
  *
  * @author Tomas Barton 
  */
-public class BicingSuccessorFunction1 implements SuccessorFunction {
+public class SuccessorFunction1 implements SuccessorFunction {
     private int numVans;
     private int vanCapacity;
     private int cnt;
     private BicingState bicing;
 
-    public BicingSuccessorFunction1(int numVans, int vanCapacity){
+    public SuccessorFunction1(int numVans, int vanCapacity){
         this.numVans = numVans;
         this.vanCapacity = vanCapacity;
     }
@@ -48,7 +49,7 @@ public class BicingSuccessorFunction1 implements SuccessorFunction {
         }
         //all available bikes to different station than is this one
         for(int i=0; i < cnt; i++){
-            if(i!=fromStation){
+            if(i!=fromStation && bicing.getBikesDemanded(i) > 0){
                 newState = bicing.clone();
                 newState.moveBicicle(fromStation, i, numBikes, newState.getActionCount());
                 succ.add(new Successor(newState.getLastAction(), newState));
@@ -58,10 +59,10 @@ public class BicingSuccessorFunction1 implements SuccessorFunction {
         //possible combinations
         for(int k=1; k<numBikes;k++){
             for(int i=0; i < cnt; i++){
-                if(i!=fromStation){
+                if(i!=fromStation && bicing.getBikesDemanded(i) > 0){
                      //unload some bikes at one station
                      for(int j=0; j<cnt; j++){
-                            if(j!=fromStation && j!=i){
+                            if(j!=fromStation && j!=i && bicing.getBikesDemanded(j) > 0){
                                 //and the rest we try to unload to every other station
                                  BicingState secondStepState = bicing.clone();
                                  secondStepState.dobleMoveBikes(fromStation, i, k,

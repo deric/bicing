@@ -1,5 +1,6 @@
-package IA.Bicing;
+package IA.Bicing.succesor;
 
+import IA.Bicing.*;
 import aima.search.framework.Successor;
 import aima.search.framework.SuccessorFunction;
 import java.util.ArrayList;
@@ -9,13 +10,13 @@ import java.util.List;
  *
  * @author Tomas Barton
  */
-public class BicingSuccessorFunction2 implements SuccessorFunction {
+public class SuccessorFunction2 implements SuccessorFunction {
     private int numVans;
     private int vanCapacity;
     private int cnt;
     private BicingState bicing;
 
-    public BicingSuccessorFunction2(int numVans, int vanCapacity){
+    public SuccessorFunction2(int numVans, int vanCapacity){
         this.numVans = numVans;
         this.vanCapacity = vanCapacity;
     }
@@ -32,49 +33,8 @@ public class BicingSuccessorFunction2 implements SuccessorFunction {
                     expandPossibleDestinations(successors, i, num);
                 }
             }
-        }else{
-            BicingState e;
-            boolean ret;
-            String msg;
-            int last = bicing.getMoveCount() -1;
-            if(last > 1){
-                for(int i =last; i>1; i--){
-                    e = bicing.clone();
-                    msg = "removed "+e.getMovementInfo(i);
-                    e.removeMove(i);
-                    successors.add(new Successor(msg, e));
-                }
-            }
-            for(int i = 0; i< bicing.getStationsNum(); i++){
-                int bikesMoved = bicing.getNumMoved(last);
-                //try to increase number of moved bikes
-                do {
-                   e = bicing.clone();
-                   ret = e.changeMove(last, i, ++bikesMoved);
-                   if(ret){
-                       msg = e.getLastAction();
-                       System.out.println(msg);
-                       successors.add(new Successor(msg, e));
-                   }
-                }while(ret);
-
-                bikesMoved = bicing.getNumMoved(last);
-                //try to decrease number of moved bikes
-                if(bikesMoved > 1){
-                    do {
-                       e = bicing.clone();
-                       ret = e.changeMove(last, i, --bikesMoved);
-                       if(ret){
-                           msg = e.getLastAction();
-                           System.out.println(msg);
-                           successors.add(new Successor(msg, e));
-                       }
-                    }while(ret && bikesMoved>1);
-                }
-            }
-
-
         }
+        alterCurrentState(successors);
        // System.out.println("next states: "+successors.size());
         return successors;
     }
@@ -87,7 +47,7 @@ public class BicingSuccessorFunction2 implements SuccessorFunction {
         }
         //all available bikes to different station than is this one
         for(int i=0; i < cnt; i++){
-            if(i!=fromStation){
+            if(i!=fromStation && bicing.getBikesDemanded(i) > 0){
                 newState = bicing.clone();
                 newState.moveBicicle(fromStation, i, numBikes,newState.getActionCount());
                 succ.add(new Successor(newState.getLastAction(), newState));
@@ -97,10 +57,10 @@ public class BicingSuccessorFunction2 implements SuccessorFunction {
         //possible combinations
         for(int k=1; k<numBikes;k++){
             for(int i=0; i < cnt; i++){
-                if(i!=fromStation){
+                if(i!=fromStation && bicing.getBikesDemanded(i) > 0){
                      //unload some bikes at one station
                      for(int j=0; j<cnt; j++){
-                            if(j!=fromStation && j!=i){
+                            if(j!=fromStation && j!=i && bicing.getBikesDemanded(j) > 0){
                                 //and the rest we try to unload to every other station
                                  BicingState secondStepState = bicing.clone();
                                  secondStepState.dobleMoveBikes(fromStation, i, 
@@ -111,6 +71,54 @@ public class BicingSuccessorFunction2 implements SuccessorFunction {
                 }
             }
         }
+    }
+
+
+    public boolean alterCurrentState(ArrayList successors){
+            BicingState e;
+            boolean ret;
+            String msg;
+            int last = bicing.getMoveCount() -1;
+            //we dont want to return to initial state
+            if(last > 1){
+                for(int i =last; i>1; i--){
+                    e = bicing.clone();
+                    msg = "removed "+e.getMovementInfo(i);
+                    e.removeMove(i);
+                    successors.add(new Successor(msg, e));
+                }
+            }
+            if(last < 0){
+                return false;
+            }
+            for(int i = 0; i< bicing.getStationsNum(); i++){
+                int bikesMoved = bicing.getNumMoved(last);
+                //try to increase number of moved bikes
+                do {
+                   e = bicing.clone();
+                   ret = e.changeMove(last, i, ++bikesMoved);
+                   if(ret){
+                       msg = e.getLastAction();
+                    //   System.out.println(msg);
+                       successors.add(new Successor(msg, e));
+                   }
+                }while(ret);
+
+                bikesMoved = bicing.getNumMoved(last);
+                //try to decrease number of moved bikes
+                if(bikesMoved > 1){
+                    do {
+                       e = bicing.clone();
+                       ret = e.changeMove(last, i, --bikesMoved);
+                       if(ret){
+                           msg = e.getLastAction();
+                        //   System.out.println(msg);
+                           successors.add(new Successor(msg, e));
+                       }
+                    }while(ret && bikesMoved>1);
+                }
+            }
+            return true;
     }
 
 

@@ -1,5 +1,9 @@
-package IA.Bicing;
+package IA.Bicing.demo;
 
+import IA.Bicing.succesor.SuccessorFunction2;
+import IA.Bicing.succesor.SuccessorFunction1;
+import IA.Bicing.heuristic.Heuristic4;
+import IA.Bicing.*;
 import aima.search.framework.GraphSearch;
 import aima.search.framework.HeuristicFunction;
 import aima.search.framework.Problem;
@@ -8,6 +12,7 @@ import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.AStarSearch;
 import aima.search.informed.HillClimbingSearch;
+import aima.search.informed.Scheduler;
 import aima.search.informed.SimulatedAnnealingSearch;
 import aima.search.uninformed.BreadthFirstSearch;
 import aima.search.uninformed.DepthFirstSearch;
@@ -42,7 +47,7 @@ public class BicingDemo {
         System.out.println("\nInitial State  -->");
         System.out.println(initialState);
 
-        HeuristicFunction h = new BicingHeuristicFunction4(0.5);
+        HeuristicFunction h = new Heuristic4(0.5);
         hillClimbingSearch(initialState, h);
         simulatedAnnealingSearch(initialState, h);
     }
@@ -52,7 +57,7 @@ public class BicingDemo {
 		System.out.println("\nHillClimbing  -->");
 		try {
                         Problem problem=new Problem(initialState,
-                                new BicingSuccessorFunction1(numVan, vanCapacity),
+                                new SuccessorFunction1(numVan, vanCapacity),
                                 new BicingGoalTest(),
                                 h
                                 );
@@ -75,11 +80,12 @@ public class BicingDemo {
 		System.out.println("\nSimulated Annealing  -->");
 		try {
 			  Problem problem=new Problem(initialState,
-                                new BicingSuccessorFunction2(numVan, vanCapacity),
+                                new SuccessorFunction2(numVan, vanCapacity),
                                 new BicingGoalTest(),
                                 h
                                 );
-			SimulatedAnnealingSearch search = new SimulatedAnnealingSearch();
+                        Scheduler s = new Scheduler(40, 0.045, 200);
+			SimulatedAnnealingSearch search = new SimulatedAnnealingSearch(s);
 			SearchAgent agent = new SearchAgent(problem, search);
 
 			System.out.println();

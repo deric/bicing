@@ -36,7 +36,7 @@ public class BicingGenerator {
      *  the number of bicycles and the type of the demand
      *
      */
-    BicingGenerator(int est, int bic, int dem) {
+    public BicingGenerator(int est, int bic, int dem) {
         myRandom = new Random(100);
         numEstaciones = est;
         numBicicletas = bic;
@@ -59,7 +59,7 @@ public class BicingGenerator {
      * @param dem
      * @param seed
      */
-    BicingGenerator(int est, int bic, int dem, int seed) {
+    public BicingGenerator(int est, int bic, int dem, int seed) {
         myRandom = new Random(seed);
         numEstaciones = est;
         numBicicletas = bic;

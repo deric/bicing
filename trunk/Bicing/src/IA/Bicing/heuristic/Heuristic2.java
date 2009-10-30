@@ -1,18 +1,14 @@
-package IA.Bicing;
+package IA.Bicing.heuristic;
 
+import IA.Bicing.*;
 import aima.search.framework.HeuristicFunction;
 
 /**
  *
  * @author Tomas Barton 
  */
-public class BicingHeuristicFunction3 implements HeuristicFunction {
-    private double rate;
+public class Heuristic2 implements HeuristicFunction {
 
-    BicingHeuristicFunction3(double rate){
-        this.rate = rate;
-    }
-    
     public double getHeuristicValue(Object state) {
         BicingState bicing = (BicingState) state;
         int cnt = bicing.getStationsNum();
@@ -34,7 +30,7 @@ public class BicingHeuristicFunction3 implements HeuristicFunction {
                 mover = 0;
                 sumNeed = sumNeed - balance;
             }
-            score = free+sumNeed+ rate*bicing.getTotalDistance();
+            score = free+sumNeed;   
         }
         return score;
     }

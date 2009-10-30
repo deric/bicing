@@ -131,7 +131,7 @@ public class BicingState {
      */
     public boolean dobleMoveBikes(int source1, int destination1, int biciclesNum1,
             int source2, int destination2, int biciclesNum2, int van) {
-        if(actionCnt >= maxDepth){
+        if(actionCnt >= maxDepth || moveCnt > (2*maxDepth-2)){
             return false;
         }
         setMove(moveCnt++, source1, destination1, biciclesNum1, van);
@@ -185,10 +185,9 @@ public class BicingState {
                 return false;
             }
             //if possible remove move == return bikes to station
-            removeMove(moveIdx);
+            undoneMove(moveIdx);
             //add new move
-            setMove(moveCnt++, source, destination, bikesNum, van);
-            actionCnt++;
+            setMove(moveIdx, source, destination, bikesNum, van);
         }
         return true;
     }
@@ -217,6 +216,9 @@ public class BicingState {
         undoneMove(moveIdx);
         moveCnt--;
         actionCnt--;
+        if(actionCnt == 0 && moveCnt > 0){
+            actionCnt = 1;
+        }
     }
 
     public void removeLastMove(){
@@ -275,7 +277,7 @@ public class BicingState {
     }
 
     public String getMovementInfo(int moveIdx){
-        return transfer[moveIdx]+": "+from[moveIdx]+" -> "+to[moveIdx]+"\n";
+        return transfer[moveIdx]+" bikes: "+from[moveIdx]+" -> "+to[moveIdx]+" by van "+vans[moveIdx]+"\n";
     }
 
     /**
@@ -377,8 +379,8 @@ public class BicingState {
         sb.append(String.format("\nBicis= %3d Demanda= %3d Disponibles= %3d Necesitan= %3d\n\n", sumBic, sumDem, sumAvai, sumNeed));
         if(actionCnt > 0){
             sb.append("moves: \n");
-            for(int i =0; i<actionCnt; i++){
-                sb.append(moves[i]+"\n");
+            for(int i =0; i<moveCnt; i++){
+                sb.append(getMovementInfo(i));
             }
         }
         return sb.toString();

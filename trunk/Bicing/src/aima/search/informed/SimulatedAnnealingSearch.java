@@ -63,6 +63,10 @@ public class SimulatedAnnealingSearch extends NodeExpander implements Search {
 		this.scheduler = new Scheduler();
 	}
 
+        public SimulatedAnnealingSearch(Scheduler s) {
+		this.scheduler = s;
+	}
+
 	// function SIMULATED-ANNEALING(problem, schedule) returns a solution state
 	// inputs: problem, a problem
 	// schedule, a mapping from time to "temperature"

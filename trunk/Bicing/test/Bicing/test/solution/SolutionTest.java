@@ -1,11 +1,11 @@
 package Bicing.test.solution;
 
 import IA.Bicing.BicingGoalTest;
-import IA.Bicing.BicingHeuristicFunction2;
-import IA.Bicing.BicingHeuristicFunction4;
+import IA.Bicing.heuristic.Heuristic2;
+import IA.Bicing.heuristic.Heuristic4;
 import IA.Bicing.BicingState;
-import IA.Bicing.BicingSuccessorFunction1;
-import IA.Bicing.BicingSuccessorFunction2;
+import IA.Bicing.succesor.SuccessorFunction1;
+import IA.Bicing.succesor.SuccessorFunction2;
 import aima.search.framework.HeuristicFunction;
 import aima.search.framework.Problem;
 import aima.search.framework.SearchAgent;
@@ -60,10 +60,10 @@ public class SolutionTest  extends TestCase {
         public void testHillClimbingHeristic4(){
                 System.out.println(b);
             	System.out.println("\nHillClimbing  -->");
-                HeuristicFunction h = new BicingHeuristicFunction2();
+                HeuristicFunction h = new Heuristic2();
 		try {
                         Problem problem=new Problem(b,
-                                new BicingSuccessorFunction1(numVan, vanCapacity),
+                                new SuccessorFunction1(numVan, vanCapacity),
                                 new BicingGoalTest(),
                                 h
                                 );
@@ -89,9 +89,9 @@ public class SolutionTest  extends TestCase {
             System.out.println("\nSimulated Annealing  -->");
 		try {
 			  Problem problem=new Problem(b,
-                                new BicingSuccessorFunction2(numVan, vanCapacity),
+                                new SuccessorFunction2(numVan, vanCapacity),
                                 new BicingGoalTest(),
-                                new BicingHeuristicFunction2()
+                                new Heuristic2()
                                 );
 			SimulatedAnnealingSearch search = new SimulatedAnnealingSearch();
 			SearchAgent agent = new SearchAgent(problem, search);
