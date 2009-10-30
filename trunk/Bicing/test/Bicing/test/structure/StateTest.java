@@ -81,13 +81,35 @@ public class StateTest extends TestCase {
 
     public void testChangeMove(){
         state.moveBicicle(0, 1, 5, 0);
-        state.changeMove(0, 2, 5);
+        boolean ret = state.changeMove(0, 2, 5);
+        assertEquals(true, ret);
         assertEquals(5, state.getBikesNext(2));
         assertEquals(0, state.getBikesNext(1));
         assertEquals(5, state.getBikesNotMove(0));
         assertEquals(1.0, state.getTotalDistance());
         assertEquals(1, state.getActionCount());
         assertEquals(1, state.getMoveCount());
-
+        //we dont have so much bikes
+        assertEquals(false, state.changeMove(0, 2, 15));
+        //move 8 bikes from 0 -> 3
+        assertEquals(true, state.changeMove(0, 3, 8));
+        assertEquals(0, state.getBikesNext(2));
+        assertEquals(2, state.getBikesNext(0));
+        assertEquals(8, state.getBikesNext(3));
+        assertEquals(1, state.getActionCount());
+        assertEquals(1, state.getMoveCount());
+        assertEquals(Math.sqrt(2), state.getTotalDistance());
     }
+    
+    public void testRemoveLastMove(){
+        state.moveBicicle(0, 1, 5, 0);
+        state.removeMove(0);
+        assertEquals(10, state.getBikesNext(0));
+        assertEquals(10, state.getBikesNotMove(0));
+        assertEquals(0.0, state.getTotalDistance());
+        assertEquals(0, state.getActionCount());
+        assertEquals(0, state.getMoveCount());   
+    }
+
+
 }

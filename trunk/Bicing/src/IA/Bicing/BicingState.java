@@ -1,5 +1,7 @@
 package IA.Bicing;
 
+import java.security.InvalidParameterException;
+
 /**
  * Represents number of bikes available now and in one hour (demanded) in a city
  * @author Tomas Barton 
@@ -62,18 +64,12 @@ public class BicingState {
      * @param maxDepth
      */
     public BicingState(int[] current, int[] next, int[] demanded, int[][] coordinates, int maxDepth) {
+        //inicialization of static variables
         BicingState.demanded = demanded;
-        this.current = current;
-        this.next = next;
         BicingState.coordinates = coordinates;
         BicingState.stationsNum = demanded.length;
         BicingState.maxDepth = maxDepth;
-        moves = new String[maxDepth];
-        //maximum possible movements
-        from = new int[2*maxDepth];
-        to = new int[2*maxDepth];
-        transfer = new int[2*maxDepth];
-        vans = new int[2*maxDepth];
+        variablesSetup(current, next);
     }
 
     /**
@@ -83,15 +79,27 @@ public class BicingState {
      * @param next
      * @param demanded
      */
-    BicingState(int[] current, int[] next) {
+    private BicingState(int[] current, int[] next) {
+        variablesSetup(current, next);
+    }
+    /**
+     * Dynamic variables setup
+     * @param current
+     * @param next
+     */
+    private void variablesSetup(int[] current, int[] next){
         this.current = new int[stationsNum];
         this.next = new int[stationsNum];
         for (int i = 0; i < stationsNum; i++) {
-            BicingState.demanded[i] = demanded[i];
             this.current[i] = current[i];
             this.next[i] = next[i];
         }
-        moves = new String[maxDepth];
+        //maximum possible movements
+        moves = new String[2*maxDepth];
+        from = new int[2*maxDepth];
+        to = new int[2*maxDepth];
+        transfer = new int[2*maxDepth];
+        vans = new int[2*maxDepth];
     }
 
     /**
@@ -124,11 +132,11 @@ public class BicingState {
         actionCnt++;
     }
 
-    private void setMove(int action, int source, int destination, int bikeNum, int van){
-        from[action] = source;
-        to[action] = destination;
-        transfer[action] = bikeNum;
-        vans[action] = van;
+    private void setMove(int moveIdx, int source, int destination, int bikeNum, int van){
+        from[moveIdx] = source;
+        to[moveIdx] = destination;
+        transfer[moveIdx] = bikeNum;
+        vans[moveIdx] = van;
         current[source] -= bikeNum;
         next[source] -= bikeNum;
         if(next[source] < 0){
@@ -140,24 +148,45 @@ public class BicingState {
         /** TODO remove, for debugging only */
         String msg =  bikeNum + ": " +Integer.toString(source) + " -> " + Integer.toString(destination)
         +", dist: "+ dist;
-        moves[actionCnt] = msg;
+        moves[moveIdx] = msg;
     }
 
-    public void changeMove(int moveIdx, int destination, int bikesNum){
+    /**
+     * OPERATOR
+     * changeMove -
+     * @param moveIdx
+     * @param destination
+     * @param bikesNum
+     * @return true if move is possible
+     */
+    public boolean changeMove(int moveIdx, int destination, int bikesNum){
         int source = from[moveIdx];
         int van = vans[moveIdx];
-        //TODO
+
         if(bikesNum == transfer[moveIdx]){
-            removeMove(moveIdx);
+            undoneMove(moveIdx);
+            //just modify move that has been already done
+            setMove(moveIdx, source, destination, bikesNum, van);
         }else{
             //check if is possible to make more moves
+            if((current[source]+transfer[moveIdx]) < bikesNum){
+                return false;
+            }
+            //if possible remove move == return bikes to station
+            removeMove(moveIdx);
+            //add new move
+            setMove(moveCnt++, source, destination, bikesNum, van);
+            actionCnt++;
         }
-        
-        setMove(moveCnt++, source, destination, bikesNum, van);
-        actionCnt++;
+        return true;
     }
 
-    public void removeMove(int moveIdx){
+    /**
+     * Return bikes to station from where it were taken, counters of moves and
+     * actions are not changed
+     * @param moveIdx
+     */
+    private void undoneMove(int moveIdx){
         int source = from[moveIdx];
         int destination = to[moveIdx];
         int bikeNum = transfer[moveIdx];
@@ -167,8 +196,19 @@ public class BicingState {
         next[source] += bikeNum;
         next[destination] -= bikeNum;
         moves[moveIdx]= null;
+    }
+
+    public void removeMove(int moveIdx){
+        if(moveIdx >= moveCnt){
+            throw new InvalidParameterException("out of moves range");
+        }
+        undoneMove(moveIdx);
         moveCnt--;
         actionCnt--;
+    }
+
+    public void removeLastMove(){
+        removeMove((moveCnt-1));
     }
 
     public static void setStationsNum(int num) {
