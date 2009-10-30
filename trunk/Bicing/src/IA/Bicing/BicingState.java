@@ -109,9 +109,13 @@ public class BicingState {
      * @param toSta
      * @param numBic
      */
-    public void moveBicicle(int source, int destination, int bikesNum, int van) {
+    public boolean moveBicicle(int source, int destination, int bikesNum, int van) {
+        if(actionCnt >= maxDepth){
+            return false;
+        }
         setMove(moveCnt++, source, destination, bikesNum, van);
         actionCnt++;
+        return true;
     }
 
     /**
@@ -125,11 +129,15 @@ public class BicingState {
      * @param biciclesNum2
      * @param van
      */
-    public void dobleMoveBikes(int source1, int destination1, int biciclesNum1,
+    public boolean dobleMoveBikes(int source1, int destination1, int biciclesNum1,
             int source2, int destination2, int biciclesNum2, int van) {
+        if(actionCnt >= maxDepth){
+            return false;
+        }
         setMove(moveCnt++, source1, destination1, biciclesNum1, van);
         setMove(moveCnt++, source2, destination2, biciclesNum2, van);
         actionCnt++;
+        return true;
     }
 
     private void setMove(int moveIdx, int source, int destination, int bikeNum, int van){
@@ -162,6 +170,10 @@ public class BicingState {
     public boolean changeMove(int moveIdx, int destination, int bikesNum){
         int source = from[moveIdx];
         int van = vans[moveIdx];
+        //non-sense move
+        if(source == destination){
+            return false;
+        }
 
         if(bikesNum == transfer[moveIdx]){
             undoneMove(moveIdx);
@@ -259,7 +271,20 @@ public class BicingState {
     }
 
     public String getLastAction() {
-        return moves[(actionCnt-1)];
+        return moves[(moveCnt-1)];
+    }
+
+    public String getMovementInfo(int moveIdx){
+        return transfer[moveIdx]+": "+from[moveIdx]+" -> "+to[moveIdx]+"\n";
+    }
+
+    /**
+     * Return number of moved bikes in specified movement
+     * @param moveIdx
+     * @return
+     */
+    public int getNumMoved(int moveIdx){
+        return transfer[moveIdx];
     }
 
     public int getActionCount() {
@@ -268,6 +293,13 @@ public class BicingState {
 
     public int getMoveCount(){
         return moveCnt;
+    }
+
+    public boolean isPossibleAddMove(){
+        if(actionCnt < maxDepth){
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -2,8 +2,10 @@ package Bicing.test.solution;
 
 import IA.Bicing.BicingGoalTest;
 import IA.Bicing.BicingHeuristicFunction2;
+import IA.Bicing.BicingHeuristicFunction4;
 import IA.Bicing.BicingState;
 import IA.Bicing.BicingSuccessorFunction1;
+import IA.Bicing.BicingSuccessorFunction2;
 import aima.search.framework.HeuristicFunction;
 import aima.search.framework.Problem;
 import aima.search.framework.SearchAgent;
@@ -87,7 +89,7 @@ public class SolutionTest  extends TestCase {
             System.out.println("\nSimulated Annealing  -->");
 		try {
 			  Problem problem=new Problem(b,
-                                new BicingSuccessorFunction1(numVan, vanCapacity),
+                                new BicingSuccessorFunction2(numVan, vanCapacity),
                                 new BicingGoalTest(),
                                 new BicingHeuristicFunction2()
                                 );

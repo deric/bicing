@@ -75,7 +75,7 @@ public class BicingDemo {
 		System.out.println("\nSimulated Annealing  -->");
 		try {
 			  Problem problem=new Problem(initialState,
-                                new BicingSuccessorFunction1(numVan, vanCapacity),
+                                new BicingSuccessorFunction2(numVan, vanCapacity),
                                 new BicingGoalTest(),
                                 h
                                 );
