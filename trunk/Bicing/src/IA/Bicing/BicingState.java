@@ -1,5 +1,10 @@
 package IA.Bicing;
 
+import IA.Bicing.heuristic.Heuristic1;
+import IA.Bicing.heuristic.Heuristic2;
+import IA.Bicing.heuristic.Heuristic3;
+import IA.Bicing.heuristic.Heuristic4;
+import aima.search.framework.HeuristicFunction;
 import java.security.InvalidParameterException;
 
 /**
@@ -44,7 +49,6 @@ public class BicingState {
     /**
      * move(s) to reach this state from initial state
      */
-    private String[] moves;
     private int[] from;
     private int[] to;
     private int[] transfer;
@@ -95,7 +99,6 @@ public class BicingState {
             this.next[i] = next[i];
         }
         //maximum possible movements
-        moves = new String[2*maxDepth];
         from = new int[2*maxDepth];
         to = new int[2*maxDepth];
         transfer = new int[2*maxDepth];
@@ -153,10 +156,6 @@ public class BicingState {
         next[destination] += bikeNum;
         double dist = getStationsDistance(source, destination);
         totalDistance += dist;
-        /** TODO remove, for debugging only */
-        String msg =  bikeNum + ": " +Integer.toString(source) + " -> " + Integer.toString(destination)
-        +", dist: "+ dist;
-        moves[moveIdx] = msg;
     }
 
     /**
@@ -206,7 +205,6 @@ public class BicingState {
         current[source] += bikeNum;
         next[source] += bikeNum;
         next[destination] -= bikeNum;
-        moves[moveIdx]= null;
     }
 
     public void removeMove(int moveIdx){
@@ -273,7 +271,7 @@ public class BicingState {
     }
 
     public String getLastAction() {
-        return moves[(moveCnt-1)];
+        return getMovementInfo(moveCnt-1);
     }
 
     public String getMovementInfo(int moveIdx){
@@ -305,6 +303,15 @@ public class BicingState {
     }
 
     /**
+     * Count balance of bikes for next hour
+     * @param stationIdx
+     * @return
+     */
+    public int getBalance(int stationIdx){
+        return next[stationIdx]-demanded[stationIdx];
+    }
+
+    /**
      * Retutns the distance between two stations
      *
      * @param est1 Station one number
@@ -328,7 +335,6 @@ public class BicingState {
         BicingState bs = new BicingState(current, next);
         if(this.moveCnt > 0){
             for(int i =0; i<this.moveCnt; i++){
-                bs.moves[i] = new String(moves[i]);
                 bs.from[i] = this.from[i];
                 bs.to[i] = this.to[i];
                 bs.transfer[i] = this.transfer[i];
@@ -383,6 +389,14 @@ public class BicingState {
                 sb.append(getMovementInfo(i));
             }
         }
+        HeuristicFunction h = new Heuristic1();
+        sb.append("h1: "+h.getHeuristicValue(this)+"\n");
+        h = new Heuristic2();
+        sb.append("h2: "+h.getHeuristicValue(this)+"\n");
+        h = new Heuristic3(0.5);
+        sb.append("h3: "+h.getHeuristicValue(this)+"\n");
+        h = new Heuristic4(0.5);
+        sb.append("h4: "+h.getHeuristicValue(this)+"\n");
         return sb.toString();
     }
 }

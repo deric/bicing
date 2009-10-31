@@ -41,9 +41,10 @@ public class BicingDemo {
      */
     public static void main(String[] args) {
         Random generator = new Random();
-        BicingGenerator b = new BicingGenerator(stations, bikes, BicingGenerator.RUSH_HOUR, generator.nextInt());
+        BicingGenerator b = new BicingGenerator(stations, bikes, BicingGenerator.EQUILIBRIUM, generator.nextInt());
         Object initialState = new BicingState(b.getCurrent(), b.getNext(),
                                     b.getDemand(), b.getStationsCoordinates(),numVan);
+        System.out.print(b);
         System.out.println("\nInitial State  -->");
         System.out.println(initialState);
 

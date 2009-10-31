@@ -30,14 +30,14 @@ public class BicingGenerator {
     private final static double PERCENTAGE_USER_MOVS = .8;
     private final static double VAR_DEMAND_EQ = 0.5;
     private final static double VAR_DEMAND_RUSH = 0.9;
-
+    private int seed = 100;
     /**
      * The constructor receives as parameters the number of stations,
      *  the number of bicycles and the type of the demand
      *
      */
     public BicingGenerator(int est, int bic, int dem) {
-        myRandom = new Random(100);
+        myRandom = new Random(seed);
         numEstaciones = est;
         numBicicletas = bic;
         modoDem = dem;
@@ -60,6 +60,7 @@ public class BicingGenerator {
      * @param seed
      */
     public BicingGenerator(int est, int bic, int dem, int seed) {
+        this.seed = seed;
         myRandom = new Random(seed);
         numEstaciones = est;
         numBicicletas = bic;
@@ -265,5 +266,15 @@ public class BicingGenerator {
 
     public int[] getDemand(){
         return demand;
+    }
+
+    @Override
+    public String toString(){
+        StringBuffer sb = new StringBuffer();
+        sb.append("stations: "+numEstaciones+", ");
+        sb.append("bikes: "+numBicicletas+", ");
+        sb.append("mode: "+modoDem+", ");
+        sb.append("seed: "+seed+"\n");
+        return sb.toString();
     }
 }

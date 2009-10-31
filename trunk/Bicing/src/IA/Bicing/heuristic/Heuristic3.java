@@ -10,7 +10,7 @@ import aima.search.framework.HeuristicFunction;
 public class Heuristic3 implements HeuristicFunction {
     private double rate;
 
-    Heuristic3(double rate){
+    public Heuristic3(double rate){
         this.rate = rate;
     }
     
@@ -18,12 +18,10 @@ public class Heuristic3 implements HeuristicFunction {
         BicingState bicing = (BicingState) state;
         int cnt = bicing.getStationsNum();
         double score = 0.0;
-        int numNext, numDem,numStay, balance,mover,free =0,sumNeed=0;
+        int numStay, balance,mover,free =0,sumNeed=0;
         for(int i = 0; i<cnt; i++){
-            numNext = bicing.getBikesNext(i);
-            numDem = bicing.getBikesDemanded(i);
             numStay = bicing.getBikesNotMove(i);
-            balance = numNext - numDem;
+            balance = bicing.getBalance(i);
             if (balance > 0) {
                 if (balance > numStay) {
                     mover = numStay;

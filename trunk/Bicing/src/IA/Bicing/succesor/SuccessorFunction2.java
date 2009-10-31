@@ -39,11 +39,15 @@ public class SuccessorFunction2 implements SuccessorFunction {
         return successors;
     }
 
-    private void expandPossibleDestinations(ArrayList succ,int fromStation, int numBikes){
+    private boolean expandPossibleDestinations(ArrayList succ,int fromStation, int numBikes){
         BicingState newState;
         //we can only move the maximum capacity of van
         if(numBikes > vanCapacity){
             numBikes = vanCapacity;
+        }
+
+        if(!bicing.isPossibleAddMove()){
+            return false;
         }
         //all available bikes to different station than is this one
         for(int i=0; i < cnt; i++){
@@ -71,6 +75,7 @@ public class SuccessorFunction2 implements SuccessorFunction {
                 }
             }
         }
+        return true;
     }
 
 
