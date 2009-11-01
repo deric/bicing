@@ -16,7 +16,7 @@ public class Greedy {
     public BicingState simplySolve(){
         int stations = bicing.getStationsNum();
         int maxAvailable = 0, avSta = 0;
-        int maxDemand = 0, tmp, dmSta = 0;
+        int maxDemand = 0, tmp, dmSta = 0, mov;
         for(int i=0; i<stations; i++){
             tmp = bicing.getBikesNotMove(i);
             if(tmp > maxAvailable){
@@ -29,7 +29,12 @@ public class Greedy {
                 dmSta = i;
             }
         }
-        bicing.moveBicicle(avSta, dmSta, maxAvailable, 0);
+        if(maxDemand > maxAvailable){
+            mov = maxAvailable;
+        }else{
+            mov = maxDemand;
+        }
+        bicing.moveBicicle(avSta, dmSta, mov, 0);
         return bicing;
     }
 

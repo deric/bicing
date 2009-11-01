@@ -31,7 +31,7 @@ public class Heuristic3 implements HeuristicFunction {
                 free += mover;
             } else {
                 mover = 0;
-                sumNeed = sumNeed - balance;
+                sumNeed -= balance;
             }
             score = free+sumNeed+ rate*bicing.getTotalDistance();
         }

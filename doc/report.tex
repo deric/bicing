@@ -1,11 +1,13 @@
-\documentclass[a4paper,10pt]{report}
-
+\documentclass[11pt,twoside,a4paper]{mr}%two-page printing
 \usepackage[utf8]{inputenc}
+
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage{array}
 \usepackage{eurosans}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{mathtools}
 
 % Title Page
 \title{Bicing}
@@ -69,6 +71,39 @@ These information are different for each state, moreover we have other informati
  \end{description}
 
 \section{Heuristic functions}
+Heuristic function is supposed to evaluate state, so that searching algorithm can unambigously determine which state is better. 
+
+\subsection{Version 1}
+Firstly, we have to take in consideration number of unsatisfied demand of bikes. If there are no bikes needed, or the demand is satisfied, the value of heuristic function would be 0. We are trying to minimize this formula: 
+
+\begin{align}
+ h_1 &=\sum\limits_{i=0}^{numStations} not\_satistifed\_demand_i
+\end{align}
+
+Let us take into consideration situation when we have 4 stations and bike are all bikes are located only on first station, as it is described in table \ref{t:ex1a}.
+
+
+\begin{table}[!t]
+\renewcommand{\arraystretch}{1.1}
+
+\begin{center}
+\begin{tabular}[t]{|r|r|r|r|}
+\hline
+\bf Station \# & \bf Not used & \bf Next &\bf Demand\\ \hline\hline
+\sl1 & 10 & 10 & 0\\ \hline
+\sl2 & 0 & 0 & 0\\ \hline
+\sl3 & 0 & 0 & 2\\ \hline
+\sl4 & 0 & 0 & 8\\ \hline
+\end{tabular}
+\end{center}
+\label{t:ex1a}
+\caption{Initial state with heristic value \(h_1= 10.0\)}
+\end{table}
+
+ 
+
+
+
 
 
 \clearpage

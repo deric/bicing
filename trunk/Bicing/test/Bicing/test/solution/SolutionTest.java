@@ -3,6 +3,7 @@ package Bicing.test.solution;
 import IA.Bicing.BicingGoalTest;
 import IA.Bicing.BicingState;
 import IA.Bicing.heuristic.Greedy;
+import IA.Bicing.heuristic.Heuristic1;
 import IA.Bicing.heuristic.Heuristic2;
 import IA.Bicing.succesor.SuccessorFunction1;
 import IA.Bicing.succesor.SuccessorFunction2;
@@ -56,10 +57,10 @@ public class SolutionTest  extends TestCase {
               b = new BicingState(current,next,demanded, coordinates, numVan);
 	}
 
-        public void testHillClimbingHeristic4(){
+        public void testHillClimbingHeristic1(){
                 System.out.println(b);
             	System.out.println("\nHillClimbing  -->");
-                HeuristicFunction h = new Heuristic2();
+                HeuristicFunction h = new Heuristic1();
 		try {
                         Problem problem=new Problem(b,
                                 new SuccessorFunction1(numVan, vanCapacity),
@@ -95,7 +96,7 @@ public class SolutionTest  extends TestCase {
                           Problem problem=new Problem(b,
                                 new SuccessorFunction2(numVan, vanCapacity),
                                 new BicingGoalTest(),
-                                new Heuristic2()
+                                new Heuristic1()
                                 );
 			SimulatedAnnealingSearch search = new SimulatedAnnealingSearch();
 			SearchAgent agent = new SearchAgent(problem, search);
