@@ -20,6 +20,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,7 +46,7 @@ public class BicingSA {
         int stations = Integer.valueOf(args[0]);
         int bikes = Integer.valueOf(args[1]);
         int mode = Integer.valueOf(args[2]);
-        int random = Integer.valueOf(args[3]);
+       // int random = Integer.valueOf(args[3]);
         numVan = Integer.valueOf(args[4]);
         k = Integer.valueOf(args[5]);
         lam = Double.valueOf(args[6]);
@@ -70,7 +71,6 @@ public class BicingSA {
                 break;
 
         }
-
         switch(succ){
             case 1:
                     succesor = new SuccessorFunction1(numVan, vanCapacity);
@@ -80,7 +80,8 @@ public class BicingSA {
                 break;
         }
 
-
+        Random r = new Random();
+        int random = r.nextInt();
         h = new Heuristic2();
         BicingGenerator b = new BicingGenerator(stations, bikes, mode, random);
         Object initialState = new BicingState(b.getCurrent(), b.getNext(),

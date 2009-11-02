@@ -37,7 +37,7 @@ public class BicingGenerator {
      *
      */
     public BicingGenerator(int est, int bic, int dem) {
-        myRandom = new Random(seed);
+        setSeed(seed);
         numEstaciones = est;
         numBicicletas = bic;
         modoDem = dem;
@@ -60,8 +60,7 @@ public class BicingGenerator {
      * @param seed
      */
     public BicingGenerator(int est, int bic, int dem, int seed) {
-        this.seed = seed;
-        myRandom = new Random(seed);
+        setSeed(seed);
         numEstaciones = est;
         numBicicletas = bic;
         modoDem = dem;
@@ -70,6 +69,13 @@ public class BicingGenerator {
         generaEstadoActual();
         generaEstadoMovimientos();
         generaProximaDemanda();
+    }
+
+    private void setSeed(int seed){
+        if(seed < 0){
+            seed = -(seed);
+        }
+        myRandom = new Random(seed);
     }
 
     /**

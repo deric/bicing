@@ -10,7 +10,7 @@
 \usepackage{mathtools}
 
 % Title Page
-\title{Bicing}
+\title{\bfseries Bicing}
 \author{\textit{\textbf{Tomas Barton}} and \textit{\textbf{Mauro Donadeo}}}
 
 
@@ -43,6 +43,35 @@ Implementation has been done in Java, we took advantage of AIMA framework\cite{a
 
 \section{Complexity of problem}
 As long as we have to search just for solution of this problem for upcoming hour, size of state space is significantly reduced. When we display all possible states of this problem as a n-ary tree, we get not really deep tree -- this is exactly the number of maximum moves we can do and that is \textbf{\textsl{F}}, but this tree can have a huge branching factor. 
+
+Number of different moves between stations can be approximately computed as:
+
+\begin{align}
+ moves &= F * 2 * \left( {\begin{array}{*{20}c}
+n \\
+2 \\
+\end{array}} \right)
+\end{align}
+
+\begin{tabbing}
+where     \= \(n\) -- is number of stations\\
+	\> \(F\) -- number of vans
+ \end{tabbing}
+
+We are looking for different pairs of stations and we can move bikes in both directions, so that we multiply combination by 2. In this formula we do not consider moves of different number of bikes between same stations. 
+
+\begin{align*}
+ moves &= F * 2 * \left( \frac{n!}{2* (n-2)!} \right) \\
+       &= F * 2 * \frac{n*(n-1)(n-2)!}{2*(n-2)!} \\
+       &= F * n * (n-1) 
+\end{align*} 
+
+So that polynomial complexity of this problem seems to be:
+
+\begin{align}
+ T(n) &= O( k* n^2 ) = O( n^2 )
+\end{align}
+
 
 
 \chapter{Implementation}
@@ -79,7 +108,7 @@ Here is a sort overview of all operators:
 \section{Heuristic functions}
 Heuristic function is supposed to evaluate state, so that searching algorithm can unambigously determine which state is better. 
 
-\subsection{Version 1}
+\subsection*{Version 1}
 Firstly, we have to take in consideration number of unsatisfied demand of bikes. If there are no bikes needed, or the demand is satisfied, the value of heuristic function would be 0. We are trying to minimize this formula: 
 
 \begin{align}
@@ -125,7 +154,7 @@ The output of this function seems to be correct, if we move 4 bikes to station n
 \caption{Initial state with heristic value \(h_1= 6.0\)}
 \end{table}
 
-\subsection{Version 2}
+\subsection*{Version 2}
 This heuristic function proceed from version 1 however it takes into account also bikes which are not going to be used in next hour. Like in previous version we are trying to minimize \textsl{h\_2} value.
 
 \begin{align}
@@ -134,8 +163,14 @@ This heuristic function proceed from version 1 however it takes into account als
 
 This function would penalize previously shown example but in some cases it would not be possible to reach score 0.0 for best solution.
 
+\sub
+
+\section{Sucessor function}
+
 
 \chapter{Experiments}
+
+\chapter{Conclusion}
 
 \clearpage
 \begin{thebibliography}{9}
