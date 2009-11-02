@@ -162,17 +162,18 @@ public class BicingGenerator {
      *
      */
     private void generaProximaDemanda() {
-        int numMB = (numBicicletas / numEstaciones);
+        int numMB = (int)(numBicicletas / numEstaciones);
         double var[] = new double[2];
         int nBvar[]=new int[2];
         int sign = 0;
+        int r;
 
         if (modoDem == EQUILIBRIUM) {
             var[0] = VAR_DEMAND_EQ;
             var[1] = 1- VAR_DEMAND_EQ;
         } else {
             var [0] = VAR_DEMAND_RUSH;
-             var [1] = 1-VAR_DEMAND_RUSH;
+            var [1] = 1-VAR_DEMAND_RUSH;
 
         }
 
@@ -183,7 +184,11 @@ public class BicingGenerator {
             } else {
                 sign = -1;
             }
-            demand[i] = numMB + (sign * myRandom.nextInt((int) (numMB * var[myRandom.nextInt(1)])));
+            r = (int) (numMB * var[myRandom.nextInt(1)]);
+            if(r < 1){
+                r = 1;
+            }
+            demand[i] = numMB + (sign * myRandom.nextInt(r));
         }
 
     }

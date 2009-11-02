@@ -112,7 +112,7 @@ Heuristic function is supposed to evaluate state, so that searching algorithm ca
 Firstly, we have to take in consideration number of unsatisfied demand of bikes. If there are no bikes needed, or the demand is satisfied, the value of heuristic function would be 0. We are trying to minimize this formula: 
 
 \begin{align}
- h_1 &=\sum\limits_{i=0}^{numStations} not\_satistifed\_demand_i
+ h_1 &=\sum\limits_{i=0}^{n} not\_satistifed\_demand_i
 \end{align}
 
 Let us take into consideration situation when we have 4 stations and bike are all bikes are located only on first station, as it is described in table \ref{t:ex1a}.
@@ -158,17 +158,30 @@ The output of this function seems to be correct, if we move 4 bikes to station n
 This heuristic function proceed from version 1 however it takes into account also bikes which are not going to be used in next hour. Like in previous version we are trying to minimize \textsl{h\_2} value.
 
 \begin{align}
- h_2 &=\sum\limits_{i=0}^{numStations} not\_satistifed\_demand_i + not\_used\_bikes\_in\_next\_hour_i
+ h_2 &=\sum\limits_{i=0}^{n} not\_satistifed\_demand_i + not\_used\_bikes\_in\_next\_hour_i
 \end{align}
 
 This function would penalize previously shown example but in some cases it would not be possible to reach score 0.0 for best solution.
 
-\sub
+\subsection*{Counting with distance}
+Next generation of heuristic function should also optimize solution according to total distace which would vans run while moving bikes.
+We proceed from heuristic function 2, which seems to give better results.
+
+\begin{align}
+ h_3 &= h_2 + rate * \sum\limits_{i=0}^{n} distance_i
+\end{align}
+
+Because currently used heuristic value and sum of distances use completly different units value of \textsl{rate} is completly experimental value.
+
 
 \section{Sucessor function}
 
 
 \chapter{Experiments}
+
+\section{Simulated Annealing}
+
+
 
 \chapter{Conclusion}
 
