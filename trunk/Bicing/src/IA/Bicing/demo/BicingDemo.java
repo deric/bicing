@@ -4,6 +4,7 @@ import IA.Bicing.succesor.SuccessorFunction2;
 import IA.Bicing.succesor.SuccessorFunction1;
 import IA.Bicing.heuristic.Heuristic4;
 import IA.Bicing.*;
+import IA.Bicing.heuristic.Heuristic1;
 import aima.search.framework.GraphSearch;
 import aima.search.framework.HeuristicFunction;
 import aima.search.framework.Problem;
@@ -48,7 +49,7 @@ public class BicingDemo {
         System.out.println("\nInitial State  -->");
         System.out.println(initialState);
 
-        HeuristicFunction h = new Heuristic4(0.5);
+        HeuristicFunction h = new Heuristic1();
         hillClimbingSearch(initialState, h);
         simulatedAnnealingSearch(initialState, h);
     }
@@ -71,6 +72,7 @@ public class BicingDemo {
 			System.out.println("Search Outcome=" + search.getOutcome());
 			System.out.println("Final State=\n" + search.getLastSearchState());
 			printInstrumentation(agent.getInstrumentation());
+                        System.out.println(agent.getInstrumentation().getProperty("nodesExpanded"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -80,7 +82,8 @@ public class BicingDemo {
         private static void simulatedAnnealingSearch(Object initialState,HeuristicFunction h) {
 		System.out.println("\nSimulated Annealing  -->");
 		try {
-			  Problem problem=new Problem(initialState,
+
+			Problem problem=new Problem(initialState,
                                 new SuccessorFunction2(numVan, vanCapacity),
                                 new BicingGoalTest(),
                                 h

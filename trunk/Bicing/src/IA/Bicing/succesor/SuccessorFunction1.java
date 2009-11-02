@@ -51,7 +51,7 @@ public class SuccessorFunction1 implements SuccessorFunction {
         for(int i=0; i < cnt; i++){
             if(i!=fromStation && bicing.getBikesDemanded(i) > 0){
                 newState = bicing.clone();
-                newState.moveBicicle(fromStation, i, numBikes, newState.getActionCount());
+                newState.addMove(fromStation, i, numBikes, newState.getActionCount());
                 succ.add(new Successor(newState.getLastAction(), newState));
             }
         }

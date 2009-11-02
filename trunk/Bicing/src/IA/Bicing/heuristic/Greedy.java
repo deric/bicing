@@ -34,7 +34,7 @@ public class Greedy {
         }else{
             mov = maxDemand;
         }
-        bicing.moveBicicle(avSta, dmSta, mov, 0);
+        bicing.addMove(avSta, dmSta, mov, 0);
         return bicing;
     }
 

@@ -10,13 +10,13 @@ import aima.search.framework.SearchUtils;
 
 /**
  * Artificial Intelligence A Modern Approach (2nd Edition): Figure 4.11, page 112.
- * 
+ *
  * <code>
  * function HILL-CLIMBING(problem) returns a state that is a local maximum
  *   inputs: problem, a problem
  *   local variables: current, a node
  *                    neighbor, a node
- *                    
+ *
  *   current <- MAKE-NODE(INITIAL-STATE[problem])
  *   loop do
  *     neighbor <- a highest-valued successor of current
@@ -31,7 +31,7 @@ import aima.search.framework.SearchUtils;
 
 /**
  * @author Ravi Mohan
- * 
+ *
  */
 public class HillClimbingSearch extends NodeExpander implements Search {
 

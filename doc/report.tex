@@ -62,9 +62,15 @@ These information are different for each state, moreover we have other informati
 
 
 \section{Operators}
+For the sake of creating new state we have implemented a set of operators. Firstly we have operator \texttt{addMove} for moving bikes from one station to another. It is quite clear that this operator can be used only when we have some not used bikes at a station. A bit more complicated case is when we load bikes at one station and unload them at two other stations, for this purpose we have \texttt{doubleMove} operator.
 
+Secondly there is operator for altering already done move, which is called \texttt{changeMove} and we allowed changing number of bikes which are going to move and the destination. This operator checks availability of requested bikes at the station, in case that the number of bikes is not at the station, operator returns \texttt{false}. There is also possibility of changing source station but there might not be any bikes available and furthermore this action can be done by combination of \texttt{removeMove} and \texttt{addMove} (with requested source station).
+
+Lastly we have already mentioned operator \texttt{removeMove} which delete move and return bikes to original location.
+
+Here is a sort overview of all operators:
 \begin{description}
- \item[moveBikes] simply moves given number of bikes from one station to another
+ \item[addMove] simply moves given number of bikes from one station to another
 \item[doubleMove] loads \( a + b \) bikes at one station and unload \(a\) bikes at first station and \(b\) bikes at second station
 \item[changeMove] alter number of bikes or destination of this move
 \item[removeMove] deletes specified move
@@ -85,7 +91,7 @@ Let us take into consideration situation when we have 4 stations and bike are al
 
 \begin{table}[!t]
 \renewcommand{\arraystretch}{1.1}
-
+\label{t:ex1a}
 \begin{center}
 \begin{tabular}[t]{|r|r|r|r|}
 \hline
@@ -96,15 +102,40 @@ Let us take into consideration situation when we have 4 stations and bike are al
 \sl4 & 0 & 0 & 8\\ \hline
 \end{tabular}
 \end{center}
-\label{t:ex1a}
+
 \caption{Initial state with heristic value \(h_1= 10.0\)}
 \end{table}
 
- 
+The output of this function seems to be correct, if we move 4 bikes to station number~4, we would lower heuristic value to 6, but if we made nonsense move with other~6 bikes to station~2 (as is shown in \ref{t:ex1b}), the value of heuristic function would be the same, so that we introduced version~2.
+
+ \begin{table}[!t]
+\renewcommand{\arraystretch}{1.1}
+
+\label{t:ex1b}
+\begin{center}
+\begin{tabular}[t]{|r|r|r|r|}
+\hline
+\bf Station \# & \bf Not used & \bf Next &\bf Demand\\ \hline\hline
+\sl1 & 0 & 10 & 0\\ \hline
+\sl2 & 0 & 6 & 0\\ \hline
+\sl3 & 0 & 0 & 2\\ \hline
+\sl4 & 0 & 4 & 8\\ \hline
+\end{tabular}
+\end{center}
+\caption{Initial state with heristic value \(h_1= 6.0\)}
+\end{table}
+
+\subsection{Version 2}
+This heuristic function proceed from version 1 however it takes into account also bikes which are not going to be used in next hour. Like in previous version we are trying to minimize \textsl{h\_2} value.
+
+\begin{align}
+ h_2 &=\sum\limits_{i=0}^{numStations} not\_satistifed\_demand_i + not\_used\_bikes\_in\_next\_hour_i
+\end{align}
+
+This function would penalize previously shown example but in some cases it would not be possible to reach score 0.0 for best solution.
 
 
-
-
+\chapter{Experiments}
 
 \clearpage
 \begin{thebibliography}{9}

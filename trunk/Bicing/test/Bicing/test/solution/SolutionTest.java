@@ -5,12 +5,14 @@ import IA.Bicing.BicingState;
 import IA.Bicing.heuristic.Greedy;
 import IA.Bicing.heuristic.Heuristic1;
 import IA.Bicing.heuristic.Heuristic2;
+import IA.Bicing.heuristic.Heuristic5;
 import IA.Bicing.succesor.SuccessorFunction1;
 import IA.Bicing.succesor.SuccessorFunction2;
 import aima.search.framework.HeuristicFunction;
 import aima.search.framework.Problem;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
+import aima.search.informed.Scheduler;
 import aima.search.informed.SimulatedAnnealingSearch;
 import junit.framework.TestCase;
 
@@ -88,7 +90,7 @@ public class SolutionTest  extends TestCase {
         public void testSA(){
             System.out.println("\nSimulated Annealing  -->");
                 Greedy g = new Greedy(b);
-                g.simplySolve();
+                b = g.simplySolve();
                 System.out.println("greedy solution");
                 System.out.println(b);
 
@@ -96,9 +98,10 @@ public class SolutionTest  extends TestCase {
                           Problem problem=new Problem(b,
                                 new SuccessorFunction2(numVan, vanCapacity),
                                 new BicingGoalTest(),
-                                new Heuristic1()
+                                new Heuristic2()
                                 );
-			SimulatedAnnealingSearch search = new SimulatedAnnealingSearch();
+                        Scheduler s = new Scheduler(20, 0.045, 200);
+			SimulatedAnnealingSearch search = new SimulatedAnnealingSearch(s);
 			SearchAgent agent = new SearchAgent(problem, search);
 
 			System.out.println("Search Outcome=" + search.getOutcome());

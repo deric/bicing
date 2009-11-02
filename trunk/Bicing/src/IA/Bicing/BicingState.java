@@ -2,6 +2,7 @@ package IA.Bicing;
 
 import IA.Bicing.heuristic.Heuristic1;
 import IA.Bicing.heuristic.Heuristic2;
+import IA.Bicing.heuristic.Heuristic5;
 import IA.Bicing.heuristic.Heuristic3;
 import IA.Bicing.heuristic.Heuristic4;
 import aima.search.framework.HeuristicFunction;
@@ -112,8 +113,11 @@ public class BicingState {
      * @param toSta
      * @param numBic
      */
-    public boolean moveBicicle(int source, int destination, int bikesNum, int van) {
+    public boolean addMove(int source, int destination, int bikesNum, int van) {
         if(actionCnt >= maxDepth){
+            return false;
+        }
+        if(current[source]<= 0){
             return false;
         }
         setMove(moveCnt++, source, destination, bikesNum, van);
@@ -397,6 +401,8 @@ public class BicingState {
         sb.append("h3: "+h.getHeuristicValue(this)+"\n");
         h = new Heuristic4(0.5);
         sb.append("h4: "+h.getHeuristicValue(this)+"\n");
+        h = new Heuristic5();
+        sb.append("h5: "+h.getHeuristicValue(this)+"\n");
         return sb.toString();
     }
 }

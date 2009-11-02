@@ -2,16 +2,16 @@ package Bicing.test.solution;
 
 import IA.Bicing.BicingGenerator;
 import IA.Bicing.BicingGoalTest;
-import IA.Bicing.heuristic.Heuristic2;
+import IA.Bicing.heuristic.Heuristic5;
 import IA.Bicing.heuristic.Heuristic4;
 import IA.Bicing.BicingState;
 import IA.Bicing.heuristic.Greedy;
+import IA.Bicing.heuristic.Heuristic2;
 import IA.Bicing.succesor.SuccessorFunction1;
 import IA.Bicing.succesor.SuccessorFunction2;
 import aima.search.framework.HeuristicFunction;
 import aima.search.framework.Problem;
 import aima.search.framework.SearchAgent;
-import aima.search.informed.HillClimbingSearch;
 import aima.search.informed.Scheduler;
 import aima.search.informed.SimulatedAnnealingSearch;
 import junit.framework.TestCase;
@@ -48,7 +48,7 @@ public class Est10Test extends TestCase {
                                 h
                                 );
 
-			HillClimbingSearch search = new HillClimbingSearch();
+			SimulatedAnnealingSearch search = new SimulatedAnnealingSearch();
 			SearchAgent agent = new SearchAgent(problem, search);
 
 			System.out.println();
