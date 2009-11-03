@@ -124,6 +124,9 @@ public class BicingState {
         if(bikesNum > vanCapacity){
             return false;
         }
+        if(current[source] < bikesNum){
+            return false;
+        }
         setMove(moveCnt++, source, destination, bikesNum, van);
         actionCnt++;
         return true;
@@ -180,10 +183,28 @@ public class BicingState {
     public boolean changeMove(int moveIdx, int destination, int bikesNum){
         int source = from[moveIdx];
         int van = vans[moveIdx];
+        int id;
         //non-sense move
         if(source == destination){
             return false;
         }
+        if(bikesNum > vanCapacity){
+            return false;
+        }
+
+        //check if it's possible to put bikes into another van
+        id = findMove(source, destination);
+        if(id >= 0){
+            int mvbike = bikesNum + transfer[id];
+            if(mvbike <= vanCapacity && current[source] >= mvbike){
+                undoneMove(id); //return bikes from current move
+                van = vans[id];
+                //do this move again with more bikes
+                setMove(id, source, destination, mvbike, van);
+                return true;
+            }
+        }
+        //if not, we have to add new move
 
         if(bikesNum == transfer[moveIdx]){
             undoneMove(moveIdx);
@@ -200,6 +221,24 @@ public class BicingState {
             setMove(moveIdx, source, destination, bikesNum, van);
         }
         return true;
+    }
+
+    /**
+     * Try to find move with same origin and destination and if it is successfull
+     * return id of move. If not returns -1
+     * @param source
+     * @param destination
+     * @return idxMove | -1
+     */
+    private int findMove(int source, int destination){
+        for(int i=0; i<moveCnt; i++){
+            if(from[i] == source){
+                if(to[i] == destination){
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     /**

@@ -106,7 +106,6 @@ public class SuccessorFunction2 implements SuccessorFunction {
                    ret = e.changeMove(last, i, ++bikesMoved);
                    if(ret){
                        msg = e.getLastAction();
-                    //   System.out.println(msg);
                        successors.add(new Successor(msg, e));
                    }
                 }while(ret);
@@ -119,7 +118,6 @@ public class SuccessorFunction2 implements SuccessorFunction {
                        ret = e.changeMove(last, i, --bikesMoved);
                        if(ret){
                            msg = e.getLastAction();
-                        //   System.out.println(msg);
                            successors.add(new Successor(msg, e));
                        }
                     }while(ret && bikesMoved>1);

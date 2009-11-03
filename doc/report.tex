@@ -201,8 +201,13 @@ Result of \textsl{hill climbing} function seems to be pretty good, by modifing p
 
 
 \begin{tabbing}
-Parameters:     \= \(n\) -- is number of stations\\
-	\> \(F\) -- number of vans
+Parameters:     \= \textit{stations} &=  20\\
+		\> \textit{mode of demand}   &= RUSH HOUR \\
+		\> \textit{vans} = 2 \\
+		\> \textit{heuristic} = version 2 \\
+		\> \textit{k} = 60 \\
+		\> \textit{\(\lambda\)} = 0.2\\
+		\> \textit{limit} = 100
  \end{tabbing}
 
 
@@ -219,6 +224,15 @@ As you can see from \ref{sa:succ-time}
 \begin{center}
 \includegraphics[width=350px]{images/s1-s2-time.png}
 \caption{Dependency of different successor functions on computation time }
+\label{sa:succ-time}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=350px]{images/s1-s2-diff.png}
+\caption{Difference in heuristic value to Hill Climbing (the less the better))}
 \label{sa:succ-time}
 \end{center}
 \end{figure}

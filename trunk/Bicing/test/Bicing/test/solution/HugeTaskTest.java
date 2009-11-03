@@ -22,7 +22,7 @@ import junit.framework.TestCase;
  * @author Tomas Barton
  */
 public class HugeTaskTest  extends TestCase {
-    	private Object b;
+    	private BicingState b;
         private int numVan = 20;
         private static int vanCapacity = 30;
         private static int stations = 20;
@@ -46,7 +46,7 @@ public class HugeTaskTest  extends TestCase {
             	System.out.println("\nHillClimbing  -->");
                 HeuristicFunction h = new Heuristic1();
 		try {
-                        Problem problem=new Problem(b,
+                        Problem problem=new Problem( (Object)b.clone(),
                                 new SuccessorFunction1(numVan, vanCapacity),
                                 new BicingGoalTest(),
                                 h
@@ -69,13 +69,14 @@ public class HugeTaskTest  extends TestCase {
 
         public void testSA(){
             System.out.println("\nSimulated Annealing  -->");
-                Greedy g = new Greedy((BicingState) b);
-                b = g.simplySolve();
+                BicingState bs = b.clone();
+                Greedy g = new Greedy( bs);
+                g.simplySolve();
                 System.out.println("greedy solution");
-                System.out.println(b);
+                System.out.println(bs);
 
 		try {
-                          Problem problem=new Problem(b,
+                          Problem problem=new Problem(bs,
                                 new SuccessorFunction2(numVan, vanCapacity),
                                 new BicingGoalTest(),
                                 new Heuristic2()

@@ -129,8 +129,18 @@ public class StateTest extends TestCase {
         assertEquals(true, state.dobleMoveBikes(0, 3, 1, 0, 2, 1, 0));
         assertEquals(3, state.getMoveCount());
         assertEquals(2, state.getActionCount());
-        System.out.println(state);
+       // System.out.println(state);
     }
 
+    public void testJoiningStates(){
+        assertEquals(true, state.dobleMoveBikes(0, 1, 3, 0, 2, 2, 0));
+        assertEquals(true, state.changeMove(0, 1, 2));
+        assertEquals(3, state.getBikesNotMove(0));
+        //we dont have enough bikes
+        assertEquals(false, state.changeMove(0, 1, 9));
+        //we should not add new move
+        assertEquals(2, state.getMoveCount());
+        System.out.println(state);
+    }
 
 }
