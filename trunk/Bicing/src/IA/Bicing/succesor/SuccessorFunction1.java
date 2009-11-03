@@ -23,14 +23,15 @@ public class SuccessorFunction1 implements SuccessorFunction {
     public List getSuccessors(Object state) {
         ArrayList successors = new ArrayList();
         bicing = (BicingState) state;
+        int mov;
         //we can make just as many move as we have vans
         if(bicing.getActionCount() < numVans){
             cnt = bicing.getStationsNum();
             //try to move bikes (if there are any) from each station
             for(int i=0; i< cnt; i++){
-                if(bicing.hasNextAvailableBike(i)){
-                    int num = bicing.getNextAvailableBikesNum(i);
-                    expandPossibleDestinations(successors, i, num);
+                mov = bicing.getMoveableBikes(i);
+                if(mov > 0){
+                    expandPossibleDestinations(successors, i, mov);
                 }
             }
         }

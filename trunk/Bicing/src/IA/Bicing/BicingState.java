@@ -127,6 +127,20 @@ public class BicingState {
         if(current[source] < bikesNum){
             return false;
         }
+
+        //check if it's possible to put bikes into another van
+        int id = findMove(source, destination);
+        if(id >= 0){
+            int mvbike = bikesNum + transfer[id];
+            if(mvbike <= vanCapacity && current[source] >= mvbike){
+                undoneMove(id); //return bikes from current move
+                van = vans[id];
+                //do this move again with more bikes
+                setMove(id, source, destination, mvbike, van);
+                return true;
+            }
+        }
+
         setMove(moveCnt++, source, destination, bikesNum, van);
         actionCnt++;
         return true;
@@ -313,7 +327,7 @@ public class BicingState {
     }
 
     /**
-     * Number of bikes which are now at station
+     * Number of bikes which can be moved cos they are not needed
      * @param stationIdx
      * @return
      */

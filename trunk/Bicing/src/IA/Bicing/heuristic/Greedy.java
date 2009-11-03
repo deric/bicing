@@ -30,14 +30,15 @@ public class Greedy {
                 dmSta = i;
             }
         }
-        if(maxDemand > maxAvailable){
+/*        if(maxDemand > maxAvailable){
             mov = maxAvailable;
         }else{
             mov = maxDemand;
-        }
-        do{
-            success = bicing.addMove(avSta, dmSta, mov--, 0);
-        }while(!success);
+        }*/
+       // do{
+            success = bicing.addMove(avSta, dmSta, maxAvailable, 0);
+       // }while(!success);
+            System.out.println(avSta+" -> "+dmSta +" : "+maxAvailable);
         
         return bicing;
     }

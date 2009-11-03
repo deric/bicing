@@ -48,6 +48,7 @@ public class StateTest extends TestCase {
     }
 
     public void testAddMove(){
+        assertEquals(10, state.getMoveableBikes(0));
         assertEquals(true, state.addMove(0, 1, 5, 0));
         assertEquals(5, state.getNextBikes(1));
         assertEquals(1.0, state.getTotalDistance());

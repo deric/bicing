@@ -29,6 +29,7 @@ public class BicingSA {
      private static int vanCapacity = 30;
      private static int numVan = 2;
      private static HeuristicFunction h;
+     private static HeuristicFunction h1;
      private static SuccessorFunction succesor;
      private static int k, limit;
      private static double lam;
@@ -53,6 +54,8 @@ public class BicingSA {
         double rate = Double.valueOf(args[10]);
         filename = args[11];
 
+        h1 = new Heuristic1();
+
         switch(heur){
             case 1:
                 h = new Heuristic1();
@@ -76,14 +79,14 @@ public class BicingSA {
 
         Random r = new Random();
         int random = r.nextInt();
-        h = new Heuristic2();
         BicingGenerator b = new BicingGenerator(stations, bikes, mode, random);
         Object initialState = new BicingState(b.getCurrent(), b.getNext(),
                                     b.getDemand(), b.getStationsCoordinates(),numVan, vanCapacity);
        // System.out.println("\nInitial State  -->");
        // System.out.println(initialState);
        msg = "st:"+stations+",bikes:"+bikes+",mode:"+mode+",random:"+random+","+"vans:"+numVan+
-               ",k="+k+",lam="+lam+",limit="+limit+",heur="+heur+",succ="+succ+",rate="+rate;
+               ",k="+k+",lam="+lam+",limit="+limit+",heur="+heur+",succ="+succ+",rate="
+               +rate;
         simulatedAnnealingSearch(initialState);
     }
 
@@ -91,7 +94,7 @@ public class BicingSA {
 		try {
                     long start, stop, totalTime = 0;
                     int expandedNodes = 0, tries = 10;
-                    double heur = 0.0, avgHeur;
+                    double heur = 0.0, avgHeur=0.0, sumH1=0.0;
                     BicingState finalNode;
                     BicingState hc = hillClimb((BicingState) initialState);
 
@@ -113,6 +116,7 @@ public class BicingSA {
                         stop = System.currentTimeMillis(); // stop timing
                         totalTime += (stop - start);
                         heur += h.getHeuristicValue(finalNode);
+                        sumH1+= h1.getHeuristicValue(finalNode);
                         expandedNodes += Integer.valueOf(agent.getInstrumentation().getProperty("nodesExpanded"));
                     }
                     avgHeur = heur/tries;
@@ -120,7 +124,9 @@ public class BicingSA {
 
                     System.out.println("time: "+totalTime/tries+", avgNodes: "+expandedNodes/tries+
                             ", avgHeuristic: "+ avgHeur+ ", diff: "+diff);
-                    String res = msg +";"+totalTime/tries+";"+expandedNodes/tries+";"+avgHeur+";"+diff+"\n";
+                    String res = msg +";"+h1.getHeuristicValue(hc)+
+                            ";"+totalTime/tries+";"+expandedNodes/tries+";"+avgHeur+";"+diff+
+                            ";"+sumH1/tries+"\n";
                     saveToFile(filename, res);
 		} catch (Exception e) {
 			e.printStackTrace();
