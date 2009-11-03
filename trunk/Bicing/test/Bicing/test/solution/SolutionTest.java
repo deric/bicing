@@ -36,7 +36,7 @@ public class SolutionTest  extends TestCase {
                    current[2] = 0;
                    current[3] = 0;
              int[] next = new int[stations];
-                   next[0] = 0;
+                   next[0] = 10;
                    next[1] = 0;
                    next[2] = 0;
                    next[3] = 0;
@@ -77,8 +77,8 @@ public class SolutionTest  extends TestCase {
 			System.out.println("Search Outcome=" + search.getOutcome());
 			System.out.println("Final State=\n" + search.getLastSearchState());
                         BicingState finalState =(BicingState) search.getLastSearchState();
-                        assertEquals(2, finalState.getBikesNext(2));
-                        assertEquals(8, finalState.getBikesNext(3));
+                        assertEquals(2, finalState.getNextBikes(2));
+                        assertEquals(8, finalState.getNextBikes(3));
 			//printInstrumentation(agent.getInstrumentation());
 
 		} catch (Exception e) {
@@ -106,8 +106,8 @@ public class SolutionTest  extends TestCase {
 			System.out.println("Search Outcome=" + search.getOutcome());
 			System.out.println("Final State=\n" + search.getLastSearchState());
                          BicingState finalState =(BicingState) search.getLastSearchState();
-                        assertEquals(2, finalState.getBikesNext(2));
-                        assertEquals(8, finalState.getBikesNext(3));
+                        assertEquals(2, finalState.getNextBikes(2));
+                        assertEquals(8, finalState.getNextBikes(3));
 
 		} catch (Exception e) {
 			e.printStackTrace();

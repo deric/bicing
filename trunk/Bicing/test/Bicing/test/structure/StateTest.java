@@ -49,10 +49,12 @@ public class StateTest extends TestCase {
 
     public void testAddMove(){
         assertEquals(true, state.addMove(0, 1, 5, 0));
-        assertEquals(5, state.getBikesNext(1));
+        assertEquals(5, state.getNextBikes(1));
         assertEquals(1.0, state.getTotalDistance());
         assertEquals(1, state.getActionCount());
         assertEquals(1, state.getMoveCount());
+        //nonsense
+        assertEquals(false, state.addMove(0, 2, 23, 1));
     }
 
     public void testCloning(){
@@ -61,9 +63,9 @@ public class StateTest extends TestCase {
         assertEquals(state.getTotalDistance(), e.getTotalDistance());
         assertEquals(state.getStationsNum(), e.getStationsNum());
         for(int i=0; i< state.getStationsNum(); i++){
-            assertEquals(state.getBikesDemanded(i), e.getBikesDemanded(i));
-            assertEquals(state.getBikesNext(i), e.getBikesNext(i));
-            assertEquals(state.getBikesNotMove(i), e.getBikesNotMove(i));
+            assertEquals(state.getDemandedBikes(i), e.getDemandedBikes(i));
+            assertEquals(state.getNextBikes(i), e.getNextBikes(i));
+            assertEquals(state.getCurrentBikes(i), e.getCurrentBikes(i));
         }
         assertEquals(state.getActionCount(), e.getActionCount());
         assertEquals(state.getMoveCount(), e.getMoveCount());   
@@ -72,8 +74,8 @@ public class StateTest extends TestCase {
     public void testRemoveMove(){
         assertEquals(true, state.addMove(0, 1, 5, 0));
         state.removeMove(0);
-        assertEquals(10, state.getBikesNext(0));
-        assertEquals(10, state.getBikesNotMove(0));
+        assertEquals(10, state.getNextBikes(0));
+        assertEquals(10, state.getCurrentBikes(0));
         assertEquals(0.0, state.getTotalDistance());
         assertEquals(0, state.getActionCount());
         assertEquals(0, state.getMoveCount());   
@@ -83,9 +85,9 @@ public class StateTest extends TestCase {
         assertEquals(true, state.addMove(0, 1, 5, 0));
         boolean ret = state.changeMove(0, 2, 5);
         assertEquals(true, ret);
-        assertEquals(5, state.getBikesNext(2));
-        assertEquals(0, state.getBikesNext(1));
-        assertEquals(5, state.getBikesNotMove(0));
+        assertEquals(5, state.getNextBikes(2));
+        assertEquals(0, state.getNextBikes(1));
+        assertEquals(5, state.getCurrentBikes(0));
         assertEquals(1.0, state.getTotalDistance());
         assertEquals(1, state.getActionCount());
         assertEquals(1, state.getMoveCount());
@@ -93,9 +95,9 @@ public class StateTest extends TestCase {
         assertEquals(false, state.changeMove(0, 2, 15));
         //move 8 bikes from 0 -> 3
         assertEquals(true, state.changeMove(0, 3, 8));
-        assertEquals(0, state.getBikesNext(2));
-        assertEquals(2, state.getBikesNext(0));
-        assertEquals(8, state.getBikesNext(3));
+        assertEquals(0, state.getNextBikes(2));
+        assertEquals(2, state.getNextBikes(0));
+        assertEquals(8, state.getNextBikes(3));
         assertEquals(1, state.getActionCount());
         assertEquals(1, state.getMoveCount());
         assertEquals(Math.sqrt(2), state.getTotalDistance());
@@ -104,8 +106,8 @@ public class StateTest extends TestCase {
     public void testRemoveLastMove(){
         assertEquals(true, state.addMove(0, 1, 5, 0));
         state.removeMove(0);
-        assertEquals(10, state.getBikesNext(0));
-        assertEquals(10, state.getBikesNotMove(0));
+        assertEquals(10, state.getNextBikes(0));
+        assertEquals(10, state.getCurrentBikes(0));
         assertEquals(0.0, state.getTotalDistance());
         assertEquals(0, state.getActionCount());
         assertEquals(0, state.getMoveCount());   
@@ -113,13 +115,13 @@ public class StateTest extends TestCase {
 
     public void testDoubleMove(){
         assertEquals(true, state.dobleMoveBikes(0, 1, 3, 0, 2, 6, 0));
-        assertEquals(3, state.getBikesNext(1));
-        assertEquals(6, state.getBikesNext(2));
-        assertEquals(1, state.getBikesNext(0));
+        assertEquals(3, state.getNextBikes(1));
+        assertEquals(6, state.getNextBikes(2));
+        assertEquals(1, state.getNextBikes(0));
         //lets move 4 bikes to station 3
         assertEquals(true, state.changeMove(1, 3, 4));
-        assertEquals(4, state.getBikesNext(3));
-        assertEquals(0, state.getBikesNext(2));
+        assertEquals(4, state.getNextBikes(3));
+        assertEquals(0, state.getNextBikes(2));
         assertEquals(2, state.getMoveCount());
         assertEquals(1, state.getActionCount());
         //now we try to delete last move
@@ -135,7 +137,7 @@ public class StateTest extends TestCase {
     public void testJoiningStates(){
         assertEquals(true, state.dobleMoveBikes(0, 1, 3, 0, 2, 2, 0));
         assertEquals(true, state.changeMove(0, 1, 2));
-        assertEquals(3, state.getBikesNotMove(0));
+        assertEquals(3, state.getCurrentBikes(0));
         //we dont have enough bikes
         assertEquals(false, state.changeMove(0, 1, 9));
         //we should not add new move

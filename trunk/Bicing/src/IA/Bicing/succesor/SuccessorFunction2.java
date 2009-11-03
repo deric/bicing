@@ -51,7 +51,7 @@ public class SuccessorFunction2 implements SuccessorFunction {
         }
         //all available bikes to different station than is this one
         for(int i=0; i < cnt; i++){
-            if(i!=fromStation && bicing.getBikesDemanded(i) > 0){
+            if(i!=fromStation && bicing.getDemandedBikes(i) > 0){
                 newState = bicing.clone();
                 if(newState.addMove(fromStation, i, numBikes,newState.getActionCount())){
                     succ.add(new Successor(newState.getLastAction(), newState));
@@ -62,10 +62,10 @@ public class SuccessorFunction2 implements SuccessorFunction {
         //possible combinations
         for(int k=1; k<numBikes;k++){
             for(int i=0; i < cnt; i++){
-                if(i!=fromStation && bicing.getBikesDemanded(i) > 0){
+                if(i!=fromStation && bicing.getDemandedBikes(i) > 0){
                      //unload some bikes at one station
                      for(int j=0; j<cnt; j++){
-                            if(j!=fromStation && j!=i && bicing.getBikesDemanded(j) > 0){
+                            if(j!=fromStation && j!=i && bicing.getDemandedBikes(j) > 0){
                                 //and the rest we try to unload to every other station
                                  BicingState secondStepState = bicing.clone();
                                  if(secondStepState.dobleMoveBikes(fromStation, i,

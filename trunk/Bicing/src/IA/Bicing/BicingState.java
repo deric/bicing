@@ -148,7 +148,8 @@ public class BicingState {
         if(actionCnt >= maxDepth || moveCnt > (maxMoves-2)){
             return false;
         }
-        if((biciclesNum1+biciclesNum2)>vanCapacity){
+        int sum = biciclesNum1+biciclesNum2;
+        if(sum>vanCapacity || sum > current[source1] || source1 != source2){
             return false;
         }
         setMove(moveCnt++, source1, destination1, biciclesNum1, van);
@@ -299,15 +300,15 @@ public class BicingState {
         return (int) (current[stationIdx]);
     }
 
-    public int getBikesNotMove(int idx) {
+    public int getCurrentBikes(int idx) {
         return current[idx];
     }
 
-    public int getBikesNext(int idx) {
+    public int getNextBikes(int idx) {
         return next[idx];
     }
 
-    public int getBikesDemanded(int idx) {
+    public int getDemandedBikes(int idx) {
         return demanded[idx];
     }
 
@@ -316,8 +317,17 @@ public class BicingState {
      * @param stationIdx
      * @return
      */
-    public int getCurrentlyNotUsedBikesNum(int stationIdx) {
-        return (int) current[stationIdx];
+    public int getMoveableBikes(int stationIdx) {
+            int balance = getBalance(stationIdx);
+            int move = 0;
+            if (balance > 0) {
+                if (balance > current[stationIdx]) {
+                    move = current[stationIdx];
+                } else {
+                    move = balance;
+                }
+            }
+            return move;
     }
 
     public String getLastAction() {
@@ -409,9 +419,9 @@ public class BicingState {
         stdNext = new double[getStationsNum()];
         sb.append(" #   Sty Nex Dem Dif Exc \n");
         for (int i = 0; i < getStationsNum(); i++) {
-            numStay = getBikesNotMove(i);
-            numNext = getBikesNext(i);
-            numDem = getBikesDemanded(i);
+            numStay = getCurrentBikes(i);
+            numNext = getNextBikes(i);
+            numDem = getDemandedBikes(i);
             stdStay[i] = numStay;
             stdNext[i] = numNext;
             stdDem[i] = numDem;

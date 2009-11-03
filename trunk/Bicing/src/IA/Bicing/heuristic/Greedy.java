@@ -19,12 +19,12 @@ public class Greedy {
         int maxDemand = 0, tmp, dmSta = 0, mov;
         boolean success = false;
         for(int i=0; i<stations; i++){
-            tmp = bicing.getBikesNotMove(i);
+            tmp = bicing.getMoveableBikes(i);
             if(tmp > maxAvailable){
                 maxAvailable = tmp;
                 avSta = i;
             }
-            tmp = bicing.getBikesDemanded(i);
+            tmp = bicing.getDemandedBikes(i);
             if(tmp > maxDemand){
                 maxDemand = tmp;
                 dmSta = i;
