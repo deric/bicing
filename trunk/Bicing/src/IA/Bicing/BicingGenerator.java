@@ -72,9 +72,6 @@ public class BicingGenerator {
     }
 
     private void setSeed(int seed){
-        if(seed < 0){
-            seed = -(seed);
-        }
         myRandom = new Random(seed);
     }
 

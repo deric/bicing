@@ -2,9 +2,7 @@ package IA.Bicing;
 
 import IA.Bicing.heuristic.Heuristic1;
 import IA.Bicing.heuristic.Heuristic2;
-import IA.Bicing.heuristic.Heuristic5;
 import IA.Bicing.heuristic.Heuristic3;
-import IA.Bicing.heuristic.Heuristic4;
 import aima.search.framework.HeuristicFunction;
 import java.security.InvalidParameterException;
 
@@ -25,6 +23,8 @@ public class BicingState {
      * number of demanded bicycles in next hour
      */
     private static int demanded[];
+
+    private static int vanCapacity;
      /**
      * coordinates of stations
      */
@@ -46,6 +46,8 @@ public class BicingState {
      * as one action can be done two moves
      */
     private int moveCnt = 0;
+    
+    private static int maxMoves;
 
     /**
      * move(s) to reach this state from initial state
@@ -68,12 +70,14 @@ public class BicingState {
      * @param coordinates
      * @param maxDepth
      */
-    public BicingState(int[] current, int[] next, int[] demanded, int[][] coordinates, int maxDepth) {
+    public BicingState(int[] current, int[] next, int[] demanded, int[][] coordinates, int maxDepth, int vanCapacity) {
         //inicialization of static variables
         BicingState.demanded = demanded;
         BicingState.coordinates = coordinates;
         BicingState.stationsNum = demanded.length;
         BicingState.maxDepth = maxDepth;
+        BicingState.maxMoves = 2*maxDepth;
+        BicingState.vanCapacity = vanCapacity;
         variablesSetup(current, next);
     }
 
@@ -100,10 +104,10 @@ public class BicingState {
             this.next[i] = next[i];
         }
         //maximum possible movements
-        from = new int[2*maxDepth];
-        to = new int[2*maxDepth];
-        transfer = new int[2*maxDepth];
-        vans = new int[2*maxDepth];
+        from = new int[maxMoves];
+        to = new int[maxMoves];
+        transfer = new int[maxMoves];
+        vans = new int[maxMoves];
     }
 
     /**
@@ -114,10 +118,10 @@ public class BicingState {
      * @param numBic
      */
     public boolean addMove(int source, int destination, int bikesNum, int van) {
-        if(actionCnt >= maxDepth){
+        if(actionCnt >= maxDepth || current[source]<= 0 || moveCnt >= maxMoves){
             return false;
         }
-        if(current[source]<= 0){
+        if(bikesNum > vanCapacity){
             return false;
         }
         setMove(moveCnt++, source, destination, bikesNum, van);
@@ -138,7 +142,10 @@ public class BicingState {
      */
     public boolean dobleMoveBikes(int source1, int destination1, int biciclesNum1,
             int source2, int destination2, int biciclesNum2, int van) {
-        if(actionCnt >= maxDepth || moveCnt > (2*maxDepth-2)){
+        if(actionCnt >= maxDepth || moveCnt > (maxMoves-2)){
+            return false;
+        }
+        if((biciclesNum1+biciclesNum2)>vanCapacity){
             return false;
         }
         setMove(moveCnt++, source1, destination1, biciclesNum1, van);
@@ -399,10 +406,6 @@ public class BicingState {
         sb.append("h2: "+h.getHeuristicValue(this)+"\n");
         h = new Heuristic3(0.5);
         sb.append("h3: "+h.getHeuristicValue(this)+"\n");
-        h = new Heuristic4(0.5);
-        sb.append("h4: "+h.getHeuristicValue(this)+"\n");
-        h = new Heuristic5();
-        sb.append("h5: "+h.getHeuristicValue(this)+"\n");
         return sb.toString();
     }
 }

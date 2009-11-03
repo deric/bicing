@@ -2,8 +2,8 @@ package IA.Bicing.demo;
 
 import IA.Bicing.BicingGenerator;
 import IA.Bicing.BicingGoalTest;
-import IA.Bicing.heuristic.Heuristic4;
 import IA.Bicing.BicingState;
+import IA.Bicing.heuristic.Heuristic3;
 import IA.Bicing.succesor.SuccessorFunction1;
 import aima.search.framework.HeuristicFunction;
 import aima.search.framework.Problem;
@@ -36,11 +36,11 @@ public class BicingHC {
         Date start = new Date();
         BicingGenerator b = new BicingGenerator(stations, bikes, mode, random);
         Object initialState = new BicingState(b.getCurrent(), b.getNext(),
-                                    b.getDemand(), b.getStationsCoordinates(),numVan);
+                                    b.getDemand(), b.getStationsCoordinates(),numVan, vanCapacity);
         System.out.println("\nInitial State  -->");
         System.out.println(initialState);
 
-        HeuristicFunction h = new Heuristic4(0.5);
+        HeuristicFunction h = new Heuristic3(0.5);
         hillClimbingSearch(initialState, h);
         Date end = new Date();
         System.out.println(end.getTime() - start.getTime()+ " millisecond");

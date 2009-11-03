@@ -2,7 +2,6 @@ package IA.Bicing.demo;
 
 import IA.Bicing.BicingGenerator;
 import IA.Bicing.BicingGoalTest;
-import IA.Bicing.heuristic.Heuristic4;
 import IA.Bicing.BicingState;
 import IA.Bicing.heuristic.Heuristic1;
 import IA.Bicing.heuristic.Heuristic2;
@@ -21,8 +20,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -66,9 +63,6 @@ public class BicingSA {
             case 3:
                 h = new Heuristic3(rate);
                 break;
-            case 4:
-                h = new Heuristic4(rate);
-                break;
 
         }
         switch(succ){
@@ -85,11 +79,11 @@ public class BicingSA {
         h = new Heuristic2();
         BicingGenerator b = new BicingGenerator(stations, bikes, mode, random);
         Object initialState = new BicingState(b.getCurrent(), b.getNext(),
-                                    b.getDemand(), b.getStationsCoordinates(),numVan);
+                                    b.getDemand(), b.getStationsCoordinates(),numVan, vanCapacity);
        // System.out.println("\nInitial State  -->");
        // System.out.println(initialState);
        msg = "st:"+stations+",bikes:"+bikes+",mode:"+mode+",random:"+random+","+"vans:"+numVan+
-               ",k="+k+",lam="+lam+",limit="+limit+",heur="+heur+",succ="+succ;
+               ",k="+k+",lam="+lam+",limit="+limit+",heur="+heur+",succ="+succ+",rate="+rate;
         simulatedAnnealingSearch(initialState);
     }
 

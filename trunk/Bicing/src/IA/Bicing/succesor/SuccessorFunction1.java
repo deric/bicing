@@ -41,7 +41,7 @@ public class SuccessorFunction1 implements SuccessorFunction {
     private boolean expandPossibleDestinations(ArrayList succ,int fromStation, int numBikes){
         BicingState newState;
         //we can only move the maximum capacity of van
-        if(numBikes > vanCapacity){
+        if(numBikes >= vanCapacity){
             numBikes = vanCapacity;
         }
         if(!bicing.isPossibleAddMove()){
@@ -51,8 +51,9 @@ public class SuccessorFunction1 implements SuccessorFunction {
         for(int i=0; i < cnt; i++){
             if(i!=fromStation && bicing.getBikesDemanded(i) > 0){
                 newState = bicing.clone();
-                newState.addMove(fromStation, i, numBikes, newState.getActionCount());
-                succ.add(new Successor(newState.getLastAction(), newState));
+                if(newState.addMove(fromStation, i, numBikes, newState.getActionCount())){
+                    succ.add(new Successor(newState.getLastAction(), newState));
+                }
             }
         }
         //one load, two unloads
@@ -65,9 +66,11 @@ public class SuccessorFunction1 implements SuccessorFunction {
                             if(j!=fromStation && j!=i && bicing.getBikesDemanded(j) > 0){
                                 //and the rest we try to unload to every other station
                                  BicingState secondStepState = bicing.clone();
-                                 secondStepState.dobleMoveBikes(fromStation, i, k,
-                                         fromStation, j, numBikes-k,secondStepState.getActionCount());
-                                 succ.add(new Successor(secondStepState.getLastAction(), secondStepState));
+                                 if(secondStepState.dobleMoveBikes(fromStation, i, k,
+                                         fromStation, j, numBikes-k,secondStepState.getActionCount())){
+                                     succ.add(new Successor(secondStepState.getLastAction(), secondStepState));
+                                 }
+                                 
                             }
                      }
                 }

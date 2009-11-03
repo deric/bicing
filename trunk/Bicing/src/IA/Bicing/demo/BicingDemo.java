@@ -2,23 +2,14 @@ package IA.Bicing.demo;
 
 import IA.Bicing.succesor.SuccessorFunction2;
 import IA.Bicing.succesor.SuccessorFunction1;
-import IA.Bicing.heuristic.Heuristic4;
 import IA.Bicing.*;
 import IA.Bicing.heuristic.Heuristic1;
-import aima.search.framework.GraphSearch;
 import aima.search.framework.HeuristicFunction;
 import aima.search.framework.Problem;
-import aima.search.framework.QueueSearch;
-import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
-import aima.search.informed.AStarSearch;
 import aima.search.informed.HillClimbingSearch;
 import aima.search.informed.Scheduler;
 import aima.search.informed.SimulatedAnnealingSearch;
-import aima.search.uninformed.BreadthFirstSearch;
-import aima.search.uninformed.DepthFirstSearch;
-import aima.search.uninformed.DepthLimitedSearch;
-import aima.search.uninformed.IterativeDeepeningSearch;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -44,7 +35,7 @@ public class BicingDemo {
         Random generator = new Random();
         BicingGenerator b = new BicingGenerator(stations, bikes, BicingGenerator.EQUILIBRIUM, generator.nextInt());
         Object initialState = new BicingState(b.getCurrent(), b.getNext(),
-                                    b.getDemand(), b.getStationsCoordinates(),numVan);
+                                    b.getDemand(), b.getStationsCoordinates(),numVan, vanCapacity);
         System.out.print(b);
         System.out.println("\nInitial State  -->");
         System.out.println(initialState);

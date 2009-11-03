@@ -5,7 +5,6 @@ import IA.Bicing.BicingState;
 import IA.Bicing.heuristic.Greedy;
 import IA.Bicing.heuristic.Heuristic1;
 import IA.Bicing.heuristic.Heuristic2;
-import IA.Bicing.heuristic.Heuristic5;
 import IA.Bicing.succesor.SuccessorFunction1;
 import IA.Bicing.succesor.SuccessorFunction2;
 import aima.search.framework.HeuristicFunction;
@@ -56,7 +55,7 @@ public class SolutionTest  extends TestCase {
                    coordinates[3][0] = 1;
                    coordinates[3][1] = 1;
 
-              b = new BicingState(current,next,demanded, coordinates, numVan);
+              b = new BicingState(current,next,demanded, coordinates, numVan, vanCapacity);
 	}
 
         public void testHillClimbingHeristic1(){

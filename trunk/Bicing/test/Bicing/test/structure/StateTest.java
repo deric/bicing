@@ -44,7 +44,7 @@ public class StateTest extends TestCase {
         coordinates[2][1] = 0;
         coordinates[3][0] = 1;
         coordinates[3][1] = 1;
-        state = new BicingState(current, next, demanded, coordinates, numVan);
+        state = new BicingState(current, next, demanded, coordinates, numVan, vanCapacity);
     }
 
     public void testAddMove(){

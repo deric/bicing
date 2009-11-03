@@ -17,6 +17,7 @@ public class Greedy {
         int stations = bicing.getStationsNum();
         int maxAvailable = 0, avSta = 0;
         int maxDemand = 0, tmp, dmSta = 0, mov;
+        boolean success = false;
         for(int i=0; i<stations; i++){
             tmp = bicing.getBikesNotMove(i);
             if(tmp > maxAvailable){
@@ -34,7 +35,10 @@ public class Greedy {
         }else{
             mov = maxDemand;
         }
-        bicing.addMove(avSta, dmSta, mov, 0);
+        do{
+            success = bicing.addMove(avSta, dmSta, mov--, 0);
+        }while(!success);
+        
         return bicing;
     }
 

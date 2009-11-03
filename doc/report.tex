@@ -37,9 +37,11 @@ The Bicing project is quite new in Barcelona (started in 2007\cite{bicingw}), bu
 Nowadays there are more than 400\footnote{418 stations at 12 October 2009} bike stations in Barcelona, the highest concentration of bike stations is of course in centre of city. Usually each station has from 20 up to 30 stands for bikes. In the very center they are placed quite close to each other.
 
 \section{Our task}
-With usage of \textbf{\textsl{F}} vans we are supposed to optimize distribution of bikes, so that as many customers as possible will find a disposable bike at time when they need it.
+With usage of \textbf{\textsl{F}} vans we are supposed to optimize distribution of bikes, so that as many customers as possible will find a available bike at time when they need it.
 
-Implementation has been done in Java, we took advantage of AIMA framework\cite{aima}, which contains most of algorithms commonly used for  searching state space.
+A van can load up to 30 bikes and unload them to one or two another stations. The operator will supply us usage of bikes from which we can optimize moves of bikes. 
+
+Implementation has been done in Java, we took advantage of AIMA framework\cite{aima}, which contains most of algorithms commonly used for searching state space.
 
 \section{Complexity of problem}
 As long as we have to search just for solution of this problem for upcoming hour, size of state space is significantly reduced. When we display all possible states of this problem as a n-ary tree, we get not really deep tree -- this is exactly the number of maximum moves we can do and that is \textbf{\textsl{F}}, but this tree can have a huge branching factor. 
@@ -58,7 +60,7 @@ where     \= \(n\) -- is number of stations\\
 	\> \(F\) -- number of vans
  \end{tabbing}
 
-We are looking for different pairs of stations and we can move bikes in both directions, so that we multiply combination by 2. In this formula we do not consider moves of different number of bikes between same stations. 
+We are looking for different pairs of stations and we can move bikes in both directions, so that we multiply combination by 2. In this formula we do not consider moves of different number of bikes between same stations, we also neglect moves of bikes to another two stations. 
 
 \begin{align*}
  moves &= F * 2 * \left( \frac{n!}{2* (n-2)!} \right) \\
@@ -174,12 +176,54 @@ We proceed from heuristic function 2, which seems to give better results.
 Because currently used heuristic value and sum of distances use completly different units value of \textsl{rate} is completly experimental value.
 
 
-\section{Sucessor function}
+\section{Successor function}
+Successor function is called by searching algorithm to generate next states for expansion. This function does not evaluation of current state, this is done by heuristic function.
 
+\subsection*{Version 1}
+First version of successor function generates for each station, where are available bikes, all possible moves of bikes to every other stations and the same with double moves. This state space can be displayed as a n-ary tree.
+
+\subsection*{Version 2}
+Second version is made for simulated annealing, in each state we also try to alter or delete already done moves, which makes accessible one state from other states, so our state space is no longer a tree but a common graph.   
 
 \chapter{Experiments}
 
 \section{Simulated Annealing}
+Result of \textsl{hill climbing} function seems to be pretty good, by modifing parameters of \textsl{simulated annealing} algorithm we will try to get equivalent or better results like we had from \textsl{hill climbing} algorithm.
+ 
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=250px]{images/bikes-time.png}
+\caption{Dependency of number of bikes on solution time }
+\label{sa:bikes-time}
+\end{center}
+\end{figure}
+
+
+
+\begin{tabbing}
+Parameters:     \= \(n\) -- is number of stations\\
+	\> \(F\) -- number of vans
+ \end{tabbing}
+
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=350px]{images/s1-s2-h.png}
+\caption{Dependency of different successor functions on heuristic value}
+\label{sa:succ-time}
+\end{center}
+\end{figure}
+
+As you can see from \ref{sa:succ-time}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=350px]{images/s1-s2-time.png}
+\caption{Dependency of different successor functions on computation time }
+\label{sa:succ-time}
+\end{center}
+\end{figure}
+
+
 
 
 

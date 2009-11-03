@@ -4,40 +4,47 @@ import IA.Bicing.BicingGenerator;
 import IA.Bicing.BicingGoalTest;
 import IA.Bicing.BicingState;
 import IA.Bicing.heuristic.Greedy;
+import IA.Bicing.heuristic.Heuristic1;
 import IA.Bicing.heuristic.Heuristic2;
 import IA.Bicing.succesor.SuccessorFunction1;
+import IA.Bicing.succesor.SuccessorFunction2;
 import aima.search.framework.HeuristicFunction;
 import aima.search.framework.Problem;
 import aima.search.framework.SearchAgent;
+import aima.search.informed.HillClimbingSearch;
 import aima.search.informed.Scheduler;
 import aima.search.informed.SimulatedAnnealingSearch;
+import java.util.Random;
 import junit.framework.TestCase;
 
 /**
  *
  * @author Tomas Barton
  */
-public class Est10Test extends TestCase {
-    	private BicingState b;
-        private int numVan = 2;
+public class HugeTaskTest  extends TestCase {
+    	private Object b;
+        private int numVan = 20;
         private static int vanCapacity = 30;
+        private static int stations = 20;
+        private static int bikes = 1000;
 
-	public  Est10Test(String name) {
+	public HugeTaskTest(String name) {
 		super(name);
 	}
-
 	@Override
 	public void setUp() {
-             int stations = 4;
-             BicingGenerator bg = new BicingGenerator(10, 100, BicingGenerator.RUSH_HOUR, -2098605270);
-              b = new BicingState(bg.getCurrent(), bg.getNext(),
-                                    bg.getDemand(), bg.getStationsCoordinates(),2, vanCapacity);
+              Random generator = new Random();
+              BicingGenerator g = new BicingGenerator(stations, bikes,
+                      BicingGenerator.EQUILIBRIUM, generator.nextInt());
+
+              b  = new BicingState(g.getCurrent(), g.getNext(),
+                                    g.getDemand(), g.getStationsCoordinates(),numVan, vanCapacity);
 	}
 
-        public void testHillClimbingHeristic4(){
+        public void testHillClimbingHeristic1(){
                 System.out.println(b);
             	System.out.println("\nHillClimbing  -->");
-                HeuristicFunction h = new Heuristic2();
+                HeuristicFunction h = new Heuristic1();
 		try {
                         Problem problem=new Problem(b,
                                 new SuccessorFunction1(numVan, vanCapacity),
@@ -45,7 +52,7 @@ public class Est10Test extends TestCase {
                                 h
                                 );
 
-			SimulatedAnnealingSearch search = new SimulatedAnnealingSearch();
+			HillClimbingSearch search = new HillClimbingSearch();
 			SearchAgent agent = new SearchAgent(problem, search);
 
 			System.out.println();
@@ -53,42 +60,38 @@ public class Est10Test extends TestCase {
 			System.out.println("Search Outcome=" + search.getOutcome());
 			System.out.println("Final State=\n" + search.getLastSearchState());
                         BicingState finalState =(BicingState) search.getLastSearchState();
-                        System.out.print(finalState);
-			//printInstrumentation(agent.getInstrumentation());
+
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
         }
 
-         public void testSimulatedAnnealing(){
-            	System.out.println("\nSimulated Annealing  -->");
-                HeuristicFunction h = new Heuristic2();
-                Greedy g = new Greedy(b);
-                g.simplySolve();
+        public void testSA(){
+            System.out.println("\nSimulated Annealing  -->");
+                Greedy g = new Greedy((BicingState) b);
+                b = g.simplySolve();
                 System.out.println("greedy solution");
                 System.out.println(b);
-		try {
-                        Problem problem=new Problem(b,
-                                new SuccessorFunction1(numVan, vanCapacity),
-                                new BicingGoalTest(),
-                                h
-                                );
 
-                        Scheduler s = new Scheduler(20, 0.045, 100);
+		try {
+                          Problem problem=new Problem(b,
+                                new SuccessorFunction2(numVan, vanCapacity),
+                                new BicingGoalTest(),
+                                new Heuristic2()
+                                );
+                        Scheduler s = new Scheduler(20, 0.055, 300);
 			SimulatedAnnealingSearch search = new SimulatedAnnealingSearch(s);
 			SearchAgent agent = new SearchAgent(problem, search);
 
-			System.out.println();
-			//printActions(agent.getActions());
 			System.out.println("Search Outcome=" + search.getOutcome());
 			System.out.println("Final State=\n" + search.getLastSearchState());
-                        BicingState finalState =(BicingState) search.getLastSearchState();
-                     //   System.out.print(finalState);
-			//printInstrumentation(agent.getInstrumentation());
+                         BicingState finalState =(BicingState) search.getLastSearchState();
+
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
         }
+
 }
